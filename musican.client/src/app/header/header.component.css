@@ -1,0 +1,56 @@
+.bg-grayblue {
+  background-color: #14334f;
+}
+
+.dark-toggle {
+  width: 60px;
+  height: 30px;
+  border-radius: 999px;
+  background-color: #ccc;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+}
+
+.dark-toggle.dark {
+  background-color: #4b5563;
+}
+
+.toggle-thumb {
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: left 0.3s ease, background-color 0.3s ease;
+}
+
+.dark-toggle.dark .toggle-thumb {
+  left: 34px;
+  background-color: #1f2937;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.5;
+  stroke: #ccc;
+  transition: stroke 0.3s ease;
+}
+
+.icon.dark {
+  stroke: #ccc;
+}
+
+.dark-toggle.dark .my-icon {
+  stroke: #fefefe; 
+}
+
