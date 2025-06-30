@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusiCan.Server.Data;
 
-namespace MusiCan.DatabaseContext
+namespace MusiCan.Server.DatabaseContext
 {
     public class DataContext : DbContext
     {

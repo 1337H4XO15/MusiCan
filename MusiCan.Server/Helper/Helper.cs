@@ -20,6 +20,7 @@ namespace MusiCan.Server.Helper
         private const int _keySize = 64; // 512 bits
         private const int _iterations = 10000;
         private static readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA512;
+        private static byte[] _salt = Encoding.UTF8.GetBytes("TnFWNhg3Abxtkp1u");
         // 1234 > "jLhHfUwAZ3laEdzj1tCBpIk3w0vJe5Lk/7+yc3jdoMNE6qh8qAhZZNNmIAK1TQOLQCwhIXAnFXq3r5y2YSHoAQ=="
 
         /// <summary>
@@ -27,15 +28,14 @@ namespace MusiCan.Server.Helper
         /// </summary>
         /// <param name="input">input Password gets Salted and compared</param>
         /// <param name="hashString">salted password from the db</param>
-        /// <param name="salt">salt from the db, used to salt the input and comapre against the hash</param>
         /// <returns>True if derived Hash equals stored Hash</returns>
-        public static bool VerifyHash(string input, string hashString, byte[] salt)
+        public static bool VerifyHash(string input, string hashString)
         {
             byte[] inputHash = Convert.FromBase64String(input);
             byte[] hash = Convert.FromBase64String(hashString);
             byte[] hashedPW = Rfc2898DeriveBytes.Pbkdf2(
                 inputHash,
-                salt,
+                _salt,
                 _iterations,
                 _algorithm,
                 _keySize

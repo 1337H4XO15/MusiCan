@@ -22,7 +22,7 @@ namespace MusiCan.Server.Data
 
         public ICollection<UserMusic> UserMusics { get; set; }
 
-        // Parameterloser Konstructor für EF Core
+        // Parameterloser Konstruktor für EF Core
         public User() { }
 
         public User(string name, string password, string email, Roles role)
