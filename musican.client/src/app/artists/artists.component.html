@@ -1,0 +1,28 @@
+<div class="background">
+  <img src="/background.jpg" class="bg-img" alt="Background" />
+</div>
+
+<div class="artist-container">
+  <div
+    class="card-wrapper"
+    *ngFor="let artist of artists; let i = index"
+    (click)="toggleCard(i)"
+  >
+    <div [class.flipped]="isFlipped(i)" class="card-inner">
+      <!-- Front -->
+      <div class="card-front">
+        <img [src]="artist.image" alt="{{ artist.name }}" />
+        <h3>{{ artist.name }}</h3>
+      </div>
+
+      <!-- Back -->
+      <div class="card-back">
+        <h3>{{ artist.name }}</h3>
+        <p><strong>Genre:</strong> {{ artist.genre }}</p>
+        <p><strong>Geburtsjahr:</strong> {{ artist.birthYear }}</p>
+        <p><strong>Land:</strong> {{ artist.country }}</p>
+        <p class="desc">{{ artist.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
