@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './profil.component.css'
 })
 export class ProfilComponent {
-
+  role: 'artist' | 'user' | 'admin' = 'artist';
 }

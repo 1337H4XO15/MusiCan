@@ -1,1 +1,9 @@
-<p>profil works!</p>
+<div class="background">
+  <img src="/background.jpg" class="bg-img" alt="Background" />
+</div>
+
+@if (role == 'user'){
+    <app-userprofile />
+} @else if (role == 'artist') {
+    <app-artistprofile />
+}
