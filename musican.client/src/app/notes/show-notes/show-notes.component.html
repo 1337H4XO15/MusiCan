@@ -1,0 +1,16 @@
+<div class="container my-4">
+  <div class="card p-4 shadow-lg bg-light">
+    <h2>{{ musicPiece.title }}</h2>
+    <p><strong>Komponist(en):</strong> {{ musicPiece.composers.join(', ') }}</p>
+    <p><strong>Genre:</strong> {{ musicPiece.genre }}</p>
+    <p><strong>Erscheinungsjahr:</strong> {{ musicPiece.year }}</p>
+    <p><strong>Beschreibung:</strong> {{ musicPiece.description }}</p>
+
+    <h5 class="mt-4">Noten:</h5>
+    <img
+      [src]="musicPiece.sheetMusicUrl"
+      alt="Noten für {{ musicPiece.title }}"
+      class="img-fluid rounded"
+    />
+  </div>
+</div>

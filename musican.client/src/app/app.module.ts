@@ -15,6 +15,9 @@ import { ProfilComponent } from './profil/profil.component';
 import { ArtistsComponent } from './artists/artists.component';
 import { UserprofileComponent } from './profil/userprofile/userprofile.component';
 import { ArtistprofileComponent } from './profil/artistprofile/artistprofile.component';
+import { NotesComponent } from './notes/notes.component';
+import { AddNotesComponent } from './notes/add-notes/add-notes.component';
+import { ShowNotesComponent } from './notes/show-notes/show-notes.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { ArtistprofileComponent } from './profil/artistprofile/artistprofile.com
     ArtistsComponent,
     UserprofileComponent,
     ArtistprofileComponent,
+    NotesComponent,
+    AddNotesComponent,
+    ShowNotesComponent,
   ],
   imports: [
     BrowserModule,

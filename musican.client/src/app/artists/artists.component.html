@@ -9,13 +9,11 @@
     (click)="toggleCard(i)"
   >
     <div [class.flipped]="isFlipped(i)" class="card-inner">
-      <!-- Front -->
       <div class="card-front">
         <img [src]="artist.image" alt="{{ artist.name }}" />
         <h3>{{ artist.name }}</h3>
       </div>
 
-      <!-- Back -->
       <div class="card-back">
         <h3>{{ artist.name }}</h3>
         <p><strong>Genre:</strong> {{ artist.genre }}</p>
