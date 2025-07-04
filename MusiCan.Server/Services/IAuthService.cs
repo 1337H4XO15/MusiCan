@@ -20,28 +20,27 @@ namespace MusiCan.Server.Services
         /// <returns>True wenn ein Nutzer diesen Nutzername hat</returns>
         Task<bool> CheckUserNameAsync(string username);
         /// <summary>
-        /// überprüft ob ein Nutzer mit dieser EMail bereits vorhanden ist
+        /// überprüft ob ein Nutzer mit dieser email bereits vorhanden ist
         /// </summary>
-        /// <param name="mail">EMail</param>
-        /// <returns>True wenn ein Nutzer diesen EMail hat</returns>
+        /// <param name="mail">email</param>
+        /// <returns>True wenn ein Nutzer diesen email hat</returns>
         Task<bool> CheckUserMailAsync(string mail);
         /// <summary>
         /// Nutzer neu Erstellen, wenn DeviceHash noch nicht verwendet
         /// </summary>
         /// <param name="username">Nutzername</param>
-        /// <param name="password">Password</param>
-        /// <param name="mail">EMail</param>
+        /// <param name="password">password</param>
+        /// <param name="mail">email</param>
         /// <param name="role">Rolle</param>
         /// <returns>Nutzer</returns>
         Task<User?> CreateUserAsync(string username, string password, string mail, Roles role);
         /// <summary>
-        /// Nutzer aus User Datenbank auslesen und Password DeviceHash überprüfen
+        /// Nutzer aus User Datenbank auslesen und password DeviceHash überprüfen
         /// </summary>
-        /// <param name="name">Nutzername</param>
-        /// <param name="password">Password DeviceHash</param>
-        /// <param name="mail">EMail</param>
+        /// <param name="namemail">Nutzername oder email</param>
+        /// <param name="password">password DeviceHash</param>
         /// <returns>Nutzer</returns>
-        Task<User?> AuthenticateAsync(string? username, string password, string? mail);
+        Task<User?> AuthenticateAsync(string namemail, string password);
     }
 
     public class AuthService : IAuthService
@@ -87,7 +86,9 @@ namespace MusiCan.Server.Services
 
             try
             {
-                User user = new(username, password, mail, role);
+                string hash = SecretHasher.Hash(password);
+
+                User user = new(username, hash, mail, role);
                 _dataContext.Add(user);
 
                 await _dataContext.SaveChangesAsync();
@@ -104,18 +105,17 @@ namespace MusiCan.Server.Services
             }      
         }
 
-        public async Task<User?> AuthenticateAsync(string? name, string password, string? mail)
+        public async Task<User?> AuthenticateAsync(string namemail, string password)
         {
             try
             {
                 User? user;
-                if (string.IsNullOrEmpty(name))
+
+                user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Name == namemail);
+
+                if (user == null)
                 {
-                    user = await _dataContext.Users.FirstOrDefaultAsync(u => u.EMail == mail);
-                }
-                else
-                {
-                    user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Name == name);
+                    user = await _dataContext.Users.FirstOrDefaultAsync(u => u.EMail == namemail);
                 }
 
                 if (user == null)
@@ -134,7 +134,7 @@ namespace MusiCan.Server.Services
             }
             catch (Exception ex)
             {
-                Log.Error($"Error during Login->AuthenticateAsync of user {name ?? mail}: {ex}");
+                Log.Error($"Error during Login->AuthenticateAsync of user {namemail}: {ex}");
                 return null; // schreiben in DB fehlgeschlagen
             }
         }

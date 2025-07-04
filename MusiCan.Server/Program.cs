@@ -10,8 +10,9 @@ using System.Text;
 const string version = "1.2.22";
 
 Serilog.Log.Logger = new LoggerConfiguration()
-.MinimumLevel.Information()
-.MinimumLevel.Verbose()
+//.MinimumLevel.Information()
+//.MinimumLevel.Verbose()
+.MinimumLevel.Debug()
 .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message}{NewLine}{Exception}")
 .WriteTo.File("Logs/log-.txt",
     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message}{NewLine}{Exception}",
@@ -30,7 +31,14 @@ builder.Services.AddControllers();
 // JsonWebToken Einstellungen hinzufügen
 builder.Services.Configure<Jwt>(builder.Configuration.GetSection("Jwt"));
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy => policy.WithOrigins("https://localhost:51472")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
+});
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -71,6 +79,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors("AllowAngularApp");
 
 app.UseHttpsRedirection();
 

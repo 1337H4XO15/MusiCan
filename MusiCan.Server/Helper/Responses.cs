@@ -45,9 +45,13 @@ namespace MusiCan.Server.Helper
         }
     }
 
-    public class DefaultResponse
+    public class AuthResponse
     {
         public string AuthToken { get; set; }
+
+        public string Name { get; set; }
+        
+        public DateTime ExpireTime { get; set; }
 
         public override string ToString()
         {

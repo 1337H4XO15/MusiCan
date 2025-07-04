@@ -3,28 +3,31 @@
 </div>
 
 <div>
-  @if(mode === 'signin') {
-  <app-signin />
+  <!-- Error Display -->
+  @if (error) {
+  <div class="error-message" role="alert" aria-live="assertive">
+    <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+    <span class="visually-hidden">Error: </span>
+    {{ error }}
+  </div>
+  }
+
+  @if(isLoginMode) {
+  <app-signin (modeChange)="onModeChange($event)"
+      (loadingChange)="onLoadingChange($event)"
+      (errorChange)="onErrorChange($event)" />
   } @else {
-  <app-signup />
+  <app-signup (modeChange)="onModeChange($event)"
+      (loadingChange)="onLoadingChange($event)"
+      (errorChange)="onErrorChange($event)" />
   }
 </div>
 
 <div class="signin-up-switch">
   <div class="toggle-buttons mb-4 d-flex justify-content-center">
-    <button
-      class="btn btn-outline-light me-2"
-      [class.active]="mode === 'signin'"
-      (click)="switchMode('signin')"
-    >
-      Login
-    </button>
-    <button
-      class="btn btn-outline-light"
-      [class.active]="mode === 'signup'"
-      (click)="switchMode('signup')"
-    >
-      Registrieren
+    <button class="btn btn-outline-light me-2"
+            (click)="onModeChange(isLoginMode ? 'register' : 'login'); $event.preventDefault()">
+      {{ isLoginMode ? "Registrieren" : "Anmelden" }}
     </button>
   </div>
 </div>

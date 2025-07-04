@@ -28,10 +28,11 @@ namespace MusiCan.Server.Data
         /// <param name="user">Nutzer</param>
         /// <param name="jwt">JsonWebToken Einstellungen</param>
         /// <returns>JsonWebToken</returns>
-        public static string GenerateAccessToken(User user, Jwt jwt)
+        public static (string, DateTime) GenerateAccessToken(User user, Jwt jwt)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwt.Key);
+            DateTime expire = DateTime.UtcNow.AddMinutes(expiration_time);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -40,14 +41,14 @@ namespace MusiCan.Server.Data
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                     new Claim(ClaimTypes.Role, user.Role.GetDisplayName()),
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(expiration_time),
+                Expires = expire,
                 Audience = jwt.Audience,
                 Issuer = jwt.Issuer,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return (tokenHandler.WriteToken(token), expire);
         }
     }
 }

@@ -4,22 +4,20 @@ namespace MusiCan.Server.Helper
 {
     public class RegistrationRequest
     {
-        public required string Name { get; set; }
+        public required string name { get; set; }
 
-        public required string Password { get; set; }
+        public required string password { get; set; }
 
-        public required string EMail { get; set; }
+        public required string email { get; set; }
 
-        public required string Role { get; set; }
+        public required bool iscomposer { get; set; }
     }
 
     public class LoginRequest
     {
-        public required string Name { get; set; }
+        public required string nameormail { get; set; }
 
-        public required string Password { get; set; }
-
-        public required string EMail { get; set; }
+        public required string password { get; set; }
 
     }
 }

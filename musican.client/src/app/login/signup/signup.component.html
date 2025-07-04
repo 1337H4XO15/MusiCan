@@ -2,12 +2,13 @@
   <div class="signup-box shadow-lg">
     <h2 class="text-center mb-4 text-white">Registrieren</h2>
 
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="form-group position-relative mb-3">
         <input
           type="email"
+          id="email"
           class="form-control rounded-pill ps-5"
-          placeholder="Email"
+          placeholder="email"
           formControlName="email"
         />
         <i class="bi bi-envelope position-absolute icon"></i>
@@ -16,9 +17,10 @@
       <div class="form-group position-relative mb-3">
         <input
           type="text"
+          id="name"
           class="form-control rounded-pill ps-5"
           placeholder="Benutzername"
-          formControlName="username"
+          formControlName="name"
         />
         <i class="bi bi-person position-absolute icon"></i>
       </div>
@@ -26,6 +28,7 @@
       <div class="form-group position-relative mb-3">
         <input
           type="password"
+          id="password"
           class="form-control rounded-pill ps-5"
           placeholder="Passwort"
           formControlName="password"
@@ -36,6 +39,7 @@
       <div class="form-group position-relative mb-3">
         <input
           type="password"
+          id="confirmPassword"
           class="form-control rounded-pill ps-5"
           placeholder="Passwort wiederholen"
           formControlName="confirmPassword"
@@ -55,7 +59,7 @@
         </label>
       </div>
 
-      <button type="submit" class="btn btn-light w-100 rounded-pill">
+      <button type="submit" class="btn btn-light w-100 rounded-pill" [disabled]="!registerForm.valid">
         Registrieren
       </button>
     </form>

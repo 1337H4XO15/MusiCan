@@ -2,23 +2,35 @@
   <div class="login-box shadow-lg">
     <h2 class="text-center mb-4 text-white">Login</h2>
 
-    <form (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" aria-describedby="loginInstructions">
+      <p id="loginInstructions" class="visually-hidden">
+        Zum Anmelden bitte Nutzername oder Email und Passwort eingeben.
+      </p>
+
       <div class="form-group position-relative mb-3">
-        <input
-          type="text"
-          class="form-control rounded-pill ps-5"
-          placeholder="Benutzername"
-        />
-        <i class="bi bi-person position-absolute icon"></i>
+        <label for="nameormail" class="visually-hidden">Benutzername</label>
+        <input id="nameormail"
+               formControlName="nameormail"
+               type="text"
+               class="form-control rounded-pill ps-5"
+               placeholder="Benutzername" />
+        <i class="bi bi-person position-absolute icon" aria-hidden="true"></i>
+        <div class="field-error" *ngIf="nameormail?.invalid && nameormail?.touched">
+          <span *ngIf="nameormail?.errors?.['required']">Benutzername benötigt</span>
+        </div>
       </div>
 
       <div class="form-group position-relative mb-3">
-        <input
-          type="password"
-          class="form-control rounded-pill ps-5"
-          placeholder="Passwort"
-        />
-        <i class="bi bi-lock position-absolute icon"></i>
+        <label for="password" class="visually-hidden">Passwort</label>
+        <input id="password"
+               formControlName="password"
+               type="password"
+               class="form-control rounded-pill ps-5"
+               placeholder="Passwort" />
+        <i class="bi bi-lock position-absolute icon" aria-hidden="true"></i>
+        <div class="field-error" *ngIf="password?.invalid && password?.touched">
+          <span *ngIf="password?.errors?.['required']">Passwort benötigt</span>
+        </div>
       </div>
 
       <div class="d-flex justify-content-between text-white mb-3">
@@ -29,7 +41,9 @@
         <a href="#" class="text-white-50">Passwort vergessen?</a>
       </div>
 
-      <button class="btn btn-light w-100 rounded-pill">Login</button>
+      <button type="submit" class="btn btn-light w-100 rounded-pill" [disabled]="!loginForm.valid">
+        Anmelden
+      </button>
     </form>
   </div>
 </div>

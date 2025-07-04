@@ -16,69 +16,55 @@ namespace MusiCan.Server.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IOptions<Jwt> _jwt;
-        private readonly DataContext _dataContext;
 
-        public AuthController(IAuthService authService, IOptions<Jwt> jtw, DataContext dataContext)
+        public AuthController(IAuthService authService, IOptions<Jwt> jtw)
         {
             _authService = authService;
             _jwt = jtw;
-            _dataContext = dataContext;
         }
 
         /// <summary>
         /// Http Get Anfrage um einen Nutzer zu registrieren 
         /// </summary>
-        /// <param name="reg">Name, Password, DeviceHash und Salt</param>
+        /// <param name="reg">name, password, email und isComposer</param>
         /// <returns>JsonWebToken und Product als Response</returns>
         [AllowAnonymous]
-        [HttpPost("registration")]
-        public async Task<IActionResult> Registration(RegistrationRequest reg)
+        [HttpPost("register")]
+        public async Task<IActionResult> Registration([FromBody] RegistrationRequest reg)
         {
             try
             {
-                if (!SecretHasher.IsHash(reg.Password))
+                if (await _authService.CheckUserNameAsync(reg.name))
                 {
-                    Log.Warning($"Error during Registration of user {reg.Name}: password is not a hash.");
-                    RegistrationErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
-                }
-
-                if (await _authService.CheckUserNameAsync(reg.Name))
-                {
-                    Log.Warning($"Error during Registration of user {reg.Name}: user name is already registrated.");
+                    Log.Warning($"Error during Registration of user {reg.name}: user name is already registrated.");
                     RegistrationErrorResponse error = new("user name is already registrated");
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                if (await _authService.CheckUserMailAsync(reg.EMail))
+                if (await _authService.CheckUserMailAsync(reg.email))
                 {
-                    Log.Warning($"Error during Registration of user {reg.Name}: user mail is already registrated.");
+                    Log.Warning($"Error during Registration of user {reg.name}: user mail is already registrated.");
                     RegistrationErrorResponse error = new("user mail is already registrated");
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                if (!Enum.TryParse<Roles>(reg.Role, true, out var role))
-                {
-                    Log.Warning($"Error during Registration of user {reg.Name}: not a valid role selected.");
-                    RegistrationErrorResponse error = new("not a valid role selected");
-                    return StatusCode(error.StatusCode, error.Message);
-                }
-
-                //string hashedPW = SecretHasher.GenerateSaltedPassword(reg.Password, reg.Salt);
-                //Password is already Hashed by the client on Registration
-                User? user = await _authService.CreateUserAsync(reg.Name, reg.Password, reg.EMail, role);
+                //string hashedPW = SecretHasher.GenerateSaltedPassword(reg.password, reg.Salt);
+                //password is already Hashed by the client on Registration
+                User? user = await _authService.CreateUserAsync(reg.name, reg.password, reg.email, reg.iscomposer ? Roles.Kuenstler : Roles.Nutzer);
                 if (user == null)
                 {
-                    Log.Warning($"Error during Registration of user {reg.Name}: user not created.");
+                    Log.Warning($"Error during Registration of user {reg.name}: user not created.");
                     RegistrationErrorResponse error = new();
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                string accessToken = TokenUtils.GenerateAccessToken(user, _jwt.Value);
+                (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value);
 
-                DefaultResponse response = new DefaultResponse
+                AuthResponse response = new AuthResponse
                 {
-                    AuthToken = accessToken
+                    AuthToken = accessToken,
+                    Name = user.Name,
+                    ExpireTime = expire
                 };
 
                 return Ok(response.ToString());
@@ -94,18 +80,18 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Get Anfrage um einen Nutzer einzuloggen 
         /// </summary>
-        /// <param name="login">Name und Password</param>
+        /// <param name="login">name und password</param>
         /// <returns>JsonWebToken als Response</returns>
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(Helper.LoginRequest login)
+        public async Task<IActionResult> Login([FromBody] Helper.LoginRequest login)
         {
             try
             {
-                User? user = await _authService.AuthenticateAsync(login.Name, login.Password, login.EMail);
+                User? user = await _authService.AuthenticateAsync(login.nameormail, login.password);
                 if (user == null)
                 {
-                    Log.Warning($"Error during Login of user {login.Name ?? login.EMail}: authentication failed.");
+                    Log.Warning($"Error during Login of user {login.nameormail}: authentication failed.");
                     LoginErrorResponse error = new();
                     return StatusCode(error.StatusCode, error.Message);
                 }
@@ -117,11 +103,13 @@ namespace MusiCan.Server.Controllers
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                string accessToken = TokenUtils.GenerateAccessToken(user, _jwt.Value);
+                (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value);
 
-                DefaultResponse response = new DefaultResponse
+                AuthResponse response = new AuthResponse
                 {
-                    AuthToken = accessToken
+                    AuthToken = accessToken,
+                    Name = user.Name,
+                    ExpireTime = expire
                 };
 
                 return Ok(response.ToString());

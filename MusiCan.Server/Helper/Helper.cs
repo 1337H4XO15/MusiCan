@@ -26,15 +26,15 @@ namespace MusiCan.Server.Helper
         /// <summary>
         /// compares input password with db stored pw and salt
         /// </summary>
-        /// <param name="input">input Password gets Salted and compared</param>
+        /// <param name="input">input password gets Salted and compared</param>
         /// <param name="hashString">salted password from the db</param>
         /// <returns>True if derived Hash equals stored Hash</returns>
         public static bool VerifyHash(string input, string hashString)
         {
-            byte[] inputHash = Convert.FromBase64String(input);
+            byte[] inputPwd = Encoding.UTF8.GetBytes(input);
             byte[] hash = Convert.FromBase64String(hashString);
             byte[] hashedPW = Rfc2898DeriveBytes.Pbkdf2(
-                inputHash,
+                inputPwd,
                 _salt,
                 _iterations,
                 _algorithm,
@@ -43,12 +43,12 @@ namespace MusiCan.Server.Helper
             return CryptographicOperations.FixedTimeEquals(hashedPW, hash);
         }
 
-        public static string GenerateSaltedPassword(string input, string input_salt)
+        public static string Hash(string input_s)
         {
-            byte[] salt = Encoding.UTF8.GetBytes(input_salt);
+            byte[] input = Encoding.UTF8.GetBytes(input_s);
             byte[] hashedPW = Rfc2898DeriveBytes.Pbkdf2(
                 input,
-                salt,
+                _salt,
                 _iterations,
                 _algorithm,
                 _keySize
