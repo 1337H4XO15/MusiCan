@@ -1,0 +1,22 @@
+.bg-img {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  top: 0;
+  left: 0;
+}
+
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  color: white;
+  border: 2px solid #5a7081;
+  width: 60rem;
+}
+
+.title {
+    color: #03cafc;
+}

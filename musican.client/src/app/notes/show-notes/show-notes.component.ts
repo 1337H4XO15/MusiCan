@@ -5,10 +5,11 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-show-notes',
   standalone: false,
   templateUrl: './show-notes.component.html',
-  styleUrl: './show-notes.component.css'
+  styleUrl: './show-notes.component.css',
 })
-export class ShowNotesComponent implements OnInit{
+export class ShowNotesComponent implements OnInit {
   musicPiece: any;
+  pdfSrc = 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf'; //im Test hat es mit einer localen Datei nicht funktioniert, muss dann an Datenbank angepasst werden
 
   musicPieces = [
     {
@@ -16,8 +17,9 @@ export class ShowNotesComponent implements OnInit{
       composers: ['Ludwig van Beethoven'],
       genre: 'Klassik',
       year: 1808,
-      description: 'Eines der berühmtesten klassischen Werke der Musikgeschichte.',
-      sheetMusicUrl: 'sheet-music/beethoven5.png'
+      description:
+        'Eines der berühmtesten klassischen Werke der Musikgeschichte.',
+      sheetMusicUrl: 'sheet-music/beethoven5.pdf',
     },
     {
       title: 'Die Zauberflöte',
@@ -25,8 +27,8 @@ export class ShowNotesComponent implements OnInit{
       genre: 'Oper',
       year: 1791,
       description: 'Eine der bekanntesten Opern mit märchenhaften Elementen.',
-      sheetMusicUrl: 'assets/sheet-music/zauberfloete.png'
-    }
+      sheetMusicUrl: 'assets/sheet-music/zauberfloete.png',
+    },
   ];
 
   constructor(private route: ActivatedRoute) {}

@@ -19,6 +19,8 @@ import { NotesComponent } from './notes/notes.component';
 import { AddNotesComponent } from './notes/add-notes/add-notes.component';
 import { ShowNotesComponent } from './notes/show-notes/show-notes.component';
 
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +43,7 @@ import { ShowNotesComponent } from './notes/show-notes/show-notes.component';
     AppRoutingModule,
     LucideAngularModule.pick({ Sun, Moon }),
     ReactiveFormsModule,
+    PdfViewerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
