@@ -3,19 +3,27 @@
 </div>
 
 <div class="container py-5">
+  @if(!this.random) {
   <h2 class="text-center text-white mb-5">Gespeicherte Musikstücke</h2>
+  }
 
   <div class="row g-4">
-    <div class="col-md-6 col-lg-4" *ngFor="let piece of musicPieces; let i = index">
-      <a
-        [routerLink]="['/noten', i]"
-        class="text-decoration-none"
-      >
-        <div class="card h-100 border-0 shadow-sm bg-white hover-shadow transition">
+    <div
+      class="col-md-6 col-lg-4"
+      *ngFor="let piece of musicPieces; let i = index"
+    >
+      <a [routerLink]="['/noten', i]" class="text-decoration-none">
+        <div
+          class="card h-100 border-0 shadow-sm bg-white hover-shadow transition"
+        >
           <div class="card-body">
             <h5 class="card-title text-primary">{{ piece.title }}</h5>
-            <p class="card-text mb-1"><strong>Komponist(en):</strong> {{ piece.composers.join(', ') }}</p>
-            <p class="card-text mb-1"><strong>Genre:</strong> {{ piece.genre }}</p>
+            <p class="card-text mb-1">
+              <strong>Komponist(en):</strong> {{ piece.composers.join(", ") }}
+            </p>
+            <p class="card-text mb-1">
+              <strong>Genre:</strong> {{ piece.genre }}
+            </p>
             <p class="card-text"><strong>Jahr:</strong> {{ piece.year }}</p>
           </div>
         </div>
@@ -23,4 +31,3 @@
     </div>
   </div>
 </div>
-

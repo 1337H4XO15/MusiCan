@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +20,7 @@ import { AddNotesComponent } from './notes/add-notes/add-notes.component';
 import { ShowNotesComponent } from './notes/show-notes/show-notes.component';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { AddButtonComponent } from './add-button/add-button.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     NotesComponent,
     AddNotesComponent,
     ShowNotesComponent,
+    AddButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,6 +46,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     LucideAngularModule.pick({ Sun, Moon }),
     ReactiveFormsModule,
     PdfViewerModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

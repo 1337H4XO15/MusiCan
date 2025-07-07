@@ -7,6 +7,7 @@ import { Home } from 'lucide-angular';
 import { ArtistsComponent } from './artists/artists.component';
 import { NotesComponent } from './notes/notes.component';
 import { ShowNotesComponent } from './notes/show-notes/show-notes.component';
+import { AddNotesComponent } from './notes/add-notes/add-notes.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'komponisten', component: ArtistsComponent },
   { path: 'noten', component: NotesComponent },
   { path: 'noten/:id', component: ShowNotesComponent },
+  { path: 'hinzufügen', component: AddNotesComponent },
   { path: '', component: HomeComponent },
 ];
 @NgModule({
