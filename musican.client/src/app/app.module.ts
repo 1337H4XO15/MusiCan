@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +23,16 @@ import { ShowNotesComponent } from './notes/show-notes/show-notes.component';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AddButtonComponent } from './add-button/add-button.component';
+import { AuthGuard } from './services/auth.guard';
+import { AuthInterceptor } from './services/auth.interceptor';
+
+const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: LoginComponent },
+  //{ path: 'index', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '/login' }
+];
 
 @NgModule({
   declarations: [
@@ -47,8 +59,17 @@ import { AddButtonComponent } from './add-button/add-button.component';
     ReactiveFormsModule,
     PdfViewerModule,
     FormsModule,
+    HttpClientModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
