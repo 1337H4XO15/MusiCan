@@ -1,0 +1,76 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <h2>Künstlerprofil</h2>
+
+    <form [formGroup]="artistForm" (ngSubmit)="saveArtist()">
+      <div class="text-center mb-3">
+        <img [src]="artistForm.value.profileImage" alt="Profilbild" class="rounded-circle border" width="120" height="120">
+      </div>
+
+      <div class="profile-item">
+        <label>Künstlername:</label>
+        <input *ngIf="isEditing" formControlName="username" type="text" class="form-control" />
+        <div class="text-danger" *ngIf="artistForm.get('username')?.touched && artistForm.get('username')?.invalid" style="font-size: 0.875rem; margin-top: -0.5rem;">
+          Künstlername ist erforderlich.
+        </div>
+        <span *ngIf="!isEditing" class="info">{{ artistForm.value.username }}</span>
+      </div>
+
+      <div class="profile-item">
+        <label>E-Mail:</label>
+        <input *ngIf="isEditing" formControlName="email" type="email" class="form-control" />
+        <div class="text-danger" *ngIf="artistForm.get('email')?.touched && artistForm.get('email')?.invalid" style="font-size: 0.875rem; margin-top: -0.5rem;">
+          Gültige E-Mail erforderlich.
+        </div>
+        <span *ngIf="!isEditing" class="info">{{ artistForm.value.email }}</span>
+      </div>
+
+      <div class="profile-item">
+        <label>Passwort:</label>
+        <div class="input-group" *ngIf="isEditing">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control"
+            placeholder="Passwort ändern"
+          />
+          <button type="button" class="btn btn-outline-light" (click)="togglePasswordVisibility()" tabindex="-1">
+            <i [class]="showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+          </button>
+        </div>
+        <span *ngIf="!isEditing" class="info">••••••••</span>
+      </div>
+
+      <div class="profile-item">
+        <label>Geburtsjahr:</label>
+        <input *ngIf="isEditing" formControlName="birthYear" type="number" class="form-control" />
+        <span *ngIf="!isEditing" class="info">{{ artistForm.value.birthYear }}</span>
+      </div>
+
+      <div class="profile-item">
+        <label>Genre:</label>
+        <input *ngIf="isEditing" formControlName="genre" type="text" class="form-control" />
+        <span *ngIf="!isEditing" class="info">{{ artistForm.value.genre }}</span>
+      </div>
+
+      <div class="profile-item">
+        <label>Herkunftsland:</label>
+        <input *ngIf="isEditing" formControlName="country" type="text" class="form-control" />
+        <span *ngIf="!isEditing" class="info">{{ artistForm.value.country }}</span>
+      </div>
+
+      <div class="profile-item">
+        <label>Beschreibung:</label>
+        <textarea *ngIf="isEditing" formControlName="description" class="form-control" rows="3"></textarea>
+        <span *ngIf="!isEditing" class="info">{{ artistForm.value.description }}</span>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button type="button" class="btn btn-outline-light" (click)="toggleEdit()">
+          {{ isEditing ? 'Abbrechen' : 'Bearbeiten' }}
+        </button>
+        <button type="submit" class="btn btn-primary" *ngIf="isEditing">Speichern</button>
+      </div>
+    </form>
+  </div>
+</div>

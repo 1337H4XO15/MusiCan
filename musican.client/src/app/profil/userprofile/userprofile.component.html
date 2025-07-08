@@ -1,0 +1,99 @@
+<div class="profile-container">
+  <div class="profile-card">
+    <h2>Mein Profil</h2>
+
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+      <div class="profile-item">
+        <label>Email:</label>
+        <input *ngIf="isEditing" formControlName="email" type="email" class="form-control"/>
+        <span *ngIf="!isEditing">{{ profileForm.value.email }}</span>
+      </div>
+      <div
+        class="form-text text-danger"
+        *ngIf="
+          profileForm.get('email')?.touched && profileForm.get('email')?.invalid
+        "
+        style="font-size: 0.875rem; margin-top: -0.5rem"
+      >
+        Bitte gib eine gültige E-Mail-Adresse ein.
+      </div>
+
+      <div class="profile-item">
+        <label>Nutzername:</label>
+        <input *ngIf="isEditing" formControlName="username" type="text" class="form-control"/>
+        <span *ngIf="!isEditing">{{ profileForm.value.username }}</span>
+      </div>
+      <div
+        class="form-text text-danger"
+        *ngIf="
+          profileForm.get('username')?.touched &&
+          profileForm.get('username')?.invalid
+        "
+        style="font-size: 0.875rem; margin-top: -0.5rem"
+      >
+        Der Nutzername ist erforderlich.
+      </div>
+    
+
+      <div class="profile-item">
+        <label>Passwort:</label>
+
+        <div class="input-group" *ngIf="isEditing">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control"
+            placeholder="Neues Passwort"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-light"
+            (click)="togglePasswordVisibility()"
+            tabindex="-1"
+          >
+            <i [class]="showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'"></i>
+          </button>
+        </div>
+
+        <span *ngIf="!isEditing">••••••••</span>
+      </div>
+
+      <div class="profile-item">
+        <label>Rolle:</label>
+
+        <!-- Nur Toggle im Bearbeitungsmodus -->
+        <div *ngIf="isEditing" class="toggle-wrapper">
+          <span>Nutzer</span>
+          <label class="switch">
+            <input
+              type="checkbox"
+              [checked]="profileForm.value.role === 'artist'"
+              (change)="toggleRole($event)"
+            />
+            <span class="slider round"></span>
+          </label>
+          <span>Künstler</span>
+        </div>
+
+        <!-- Nur Info-Text im Lesemodus -->
+        <span *ngIf="!isEditing">
+          {{ profileForm.value.role === "artist" ? "Künstler" : "Nutzer" }}
+        </span>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button
+          type="button"
+          class="btn btn-outline-light"
+          (click)="toggleEdit()"
+        >
+          {{ isEditing ? "Abbrechen" : "Bearbeiten" }}
+        </button>
+
+        <button type="submit" class="btn btn-primary" *ngIf="isEditing">
+          Speichern
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

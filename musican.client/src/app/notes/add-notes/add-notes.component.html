@@ -1,0 +1,74 @@
+<div class="background">
+  <img src="/background.jpg" class="bg-img" alt="Background" />
+</div>
+
+<div class="container my-5 d-flex justify-content-center">
+  <div class="glass-card p-5 w-100" style="max-width: 600px;">
+    <h2 class="mb-4 text-white">
+      <i class="bi bi-upload me-2"></i> Notenblatt hochladen
+    </h2>
+
+    <form (ngSubmit)="onSubmit()" #sheetForm="ngForm">
+      <div class="mb-3">
+        <label class="form-label text-white">Titel *</label>
+        <input
+          type="text"
+          class="form-control"
+          name="title"
+          [(ngModel)]="musicSheet.title"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-white">Autor / Komponist(en) *</label>
+        <input
+          type="text"
+          class="form-control"
+          name="author"
+          [(ngModel)]="musicSheet.author"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-white">Erscheinungsjahr</label>
+        <input
+          type="number"
+          class="form-control"
+          name="year"
+          [(ngModel)]="musicSheet.year"
+        />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-white">Genre</label>
+        <input
+          type="text"
+          class="form-control"
+          name="genre"
+          [(ngModel)]="musicSheet.genre"
+        />
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label text-white">PDF der Noten *</label>
+        <input
+          type="file"
+          class="form-control"
+          (change)="onFileSelected($event)"
+          accept="application/pdf"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-outline-light w-100"
+        [disabled]="!sheetForm.form.valid || !selectedFile"
+      >
+        <i class="bi bi-cloud-arrow-up me-2"></i> Hochladen
+      </button>
+    </form>
+  </div>
+</div>

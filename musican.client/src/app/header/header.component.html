@@ -17,6 +17,11 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active"
+            >Home</a
+          >
+        </li>
+        <li class="nav-item">
           <a class="nav-link" routerLink="/noten" routerLinkActive="active"
             >Noten</a
           >
@@ -30,26 +35,16 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/verwaltung" routerLinkActive="active"
-            >Verwaltung</a
+          <a class="nav-link" routerLink="/profil" routerLinkActive="active"
+            >Profil</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active"
+            >Login</a
           >
         </li>
       </ul>
-
-      <!-- Darkmode Toggle Button -->
-      <div
-        class="dark-toggle ms-3"
-        (click)="toggleDarkMode()"
-        [class.dark]="isDarkMode"
-      >
-        <div class="toggle-thumb">
-          @if (!isDarkMode) {
-          <lucide-icon name="sun" class="my-icon"></lucide-icon>
-          } @else {
-          <lucide-icon name="moon" class="my-icon"></lucide-icon>
-          }
-        </div>
-      </div>
     </div>
   </div>
 </nav>

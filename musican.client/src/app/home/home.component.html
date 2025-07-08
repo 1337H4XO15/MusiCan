@@ -1,0 +1,36 @@
+<div class="background">
+  <img src="/background.jpg" class="bg-img" alt="Background" />
+</div>
+
+<div class="container my-5 text-center p-5">
+  <h1 class="display-4 fw-bold text-white mb-3">
+    <i class="bi bi-music-note-list me-2"></i> Mozarts Music Matrix
+  </h1>
+  <p class="lead text-light mb-4">
+    Deine persönliche Plattform zur Verwaltung klassischer Musiknoten.
+  </p>
+
+  <button
+    class="btn btn-outline-light px-4 py-2 mb-5"
+    (click)="handleButtonClick()"
+  >
+    <i
+      class="bi me-2"
+      [ngClass]="isLoggedIn ? 'bi-plus-circle' : 'bi-box-arrow-in-right'"
+    ></i>
+    {{ isLoggedIn ? "Noten hochladen" : "Einloggen / Registrieren" }}
+  </button>
+
+  <h4 class="text-white mb-4">
+    <i class="bi bi-stars me-2"></i> Zufällige Musikstücke
+  </h4>
+
+  <app-notes [random]="true"/>
+</div>
+
+
+<!-- braucht noch eine Seite, um unter den öffentlichen Noten zu suchen; wenn nichts eingegeben ist, sollen alle nach dem Alphabet sortiert angezeigt werden;
+ man kann suchen -> Filterfunktion;
+ man kann zum Beispiel nach Komponist oder Genre sortieren -->
+
+<!-- es ist aktuell auch möglich, den Hintergrund als eigenens Component zu machen -> Laurin fragen ob sinvoll -->
