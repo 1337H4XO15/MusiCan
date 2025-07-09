@@ -45,7 +45,7 @@ builder.Services.AddOpenApi();
 
 // Datenbank hinzufügen
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // JsonWebToken (Bearer) Authentication hinzufügen
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -70,6 +70,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<DataContext>();
 
 var app = builder.Build();
+
+// DB erstellen, wenn sie nicht existiert
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+    context.Database.EnsureCreated();
+}
 
 app.UseDefaultFiles();
 app.MapStaticAssets();
