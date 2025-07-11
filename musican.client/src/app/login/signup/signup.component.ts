@@ -47,7 +47,7 @@ export class SignupComponent {
       this.authService.register(this.registerForm.value).subscribe({
         next: (response) => {
           this.loadingChange.emit(false);
-          this.router.navigate(['/index']);
+          this.router.navigate(['/']);
         },
         error: (error) => {
           this.loadingChange.emit(false);

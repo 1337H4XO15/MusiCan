@@ -7,7 +7,7 @@ using MusiCan.Server.Services;
 using Serilog;
 using System.Text;
 
-const string version = "1.2.22";
+const string version = "0.0.2";
 
 Serilog.Log.Logger = new LoggerConfiguration()
 //.MinimumLevel.Information()
@@ -65,8 +65,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+// Autorisierung mit Richtlinien hinzufügen
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("NotBanned", policy =>
+        policy.RequireRole("Nutzer", "Kuenstler", "Admin"));
+
+});
+
 // Authentication bereitstellen
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<DataContext>();
 
 var app = builder.Build();

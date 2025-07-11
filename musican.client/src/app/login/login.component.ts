@@ -8,8 +8,8 @@ import { Component } from '@angular/core';
 })
 
 export class LoginComponent {
-  isLoginMode = true;
-  loading = false;
+  isLoginMode: boolean = true;
+  loading: boolean = false;
   error = '';
 
   onLoadingChange(loading: boolean): void {

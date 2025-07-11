@@ -20,7 +20,13 @@ namespace MusiCan.Server.Data
 
         public Roles Role { get; set; }
 
+        //public byte[]? ProfileImage { get; set; }
+
+        //public string? ProfileImageContentType { get; set; }
+
         public ICollection<UserMusic> UserMusics { get; set; }
+
+        public Composer? Composer { get; set; }
 
         // Parameterloser Konstruktor für EF Core
         public User() { }

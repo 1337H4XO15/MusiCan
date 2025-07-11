@@ -45,6 +45,19 @@ namespace MusiCan.Server.Helper
         }
     }
 
+    public class InvalidTokenErrorResponse : ErrorResponse
+    {
+        public InvalidTokenErrorResponse()
+            : base("Invalid Token", 498)
+        {
+        }
+
+        public InvalidTokenErrorResponse(string msg)
+            : base(msg, 498)
+        {
+        }
+    }
+
     public class AuthResponse
     {
         public string AuthToken { get; set; }
@@ -57,6 +70,19 @@ namespace MusiCan.Server.Helper
         {
             return JsonSerializer.Serialize(this);
         }
+    }
+
+    public class ProfileResponse
+    {
+        public string Name { get; set; }
+        public string Mail { get; set; }
+        public Roles Role { get; set; }
+        public byte[]? ProfileImage { get; set; }
+        public string? ProfileImageContentType { get; set; }
+        public DateTime? BirthYear { get; set; }
+        public string? Genre { get; set; }
+        public string? Country { get; set; }
+        public string? Discription { get; set; }
     }
 
 }

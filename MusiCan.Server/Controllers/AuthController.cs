@@ -58,7 +58,7 @@ namespace MusiCan.Server.Controllers
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value);
+                (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value, 60); // 1 Stunde
 
                 AuthResponse response = new AuthResponse
                 {
@@ -103,7 +103,8 @@ namespace MusiCan.Server.Controllers
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value);
+                // 1 Woche oder 1 Stunde
+                (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value, login.remember ? 10080 : 60);
 
                 AuthResponse response = new AuthResponse
                 {

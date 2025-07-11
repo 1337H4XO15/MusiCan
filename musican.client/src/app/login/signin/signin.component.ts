@@ -24,13 +24,14 @@ export class SigninComponent implements OnInit {
   ) {
     this.loginForm = this.fb.group({
       nameormail: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      remember: [false]
     });
   }
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/index']);
+      this.router.navigate(['/']);
     }
   }
 
@@ -42,7 +43,7 @@ export class SigninComponent implements OnInit {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.loadingChange.emit(false);
-          this.router.navigate(['/index']);
+          this.router.navigate(['/']);
         },
         error: (error) => {
           this.loadingChange.emit(false);
@@ -59,4 +60,5 @@ export class SigninComponent implements OnInit {
   // Helper methods for template
   get nameormail() { return this.loginForm.get('nameormail'); }
   get password() { return this.loginForm.get('password'); }
+  get remember() { return this.loginForm.get('remember'); }
 }

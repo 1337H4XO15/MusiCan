@@ -14,18 +14,9 @@ namespace MusiCan.Server.DatabaseContext
         }
 
         /// <summary>
-        /// liest Nutzer aus User Datenbank anhand der Nutzer Id aus
-        /// </summary>
-        /// <param name="userId">Nutzer Guid</param>
-        /// <returns>Nutzer</returns>
-        public async Task<User?> GetByIdAsync(ushort userId)
-        {
-            return await _dataContext.Set<User>().FindAsync(userId);
-        }
-
-
-        /// <summary>
-        /// Linking n:n Beziehung zwischen Nutzer und Musik
+        /// Linking 
+        /// n:n Beziehung zwischen Nutzer und Musik
+        /// 1:1 Beziehung zwischen Musik und Composer
         /// </summarydotnet ef migrations add>
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,6 +33,12 @@ namespace MusiCan.Server.DatabaseContext
                 .HasOne(um => um.Music)
                 .WithMany(m => m.UserMusics)
                 .HasForeignKey(um => um.MusicId);
+
+            //modelBuilder.Entity<Composer>()
+            //    .HasOne(c => c.User)
+            //    .WithOne(u => u.Composer)
+            //    .HasForeignKey<Composer>(c => c.UserId); // Typ setzten, da beide UserId haben
+
         }
     }
 }

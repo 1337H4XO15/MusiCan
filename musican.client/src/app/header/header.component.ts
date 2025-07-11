@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service'; 
 
 @Component({
   selector: 'app-header',
@@ -7,12 +8,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  isDarkMode = false;
+  isDarkMode: boolean = false;
+  isLoggedIn: boolean = false;
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     const stored = localStorage.getItem('darkmode');
     this.isDarkMode = stored === 'true';
     this.applyDarkMode();
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = !!user;
+    });
+    //this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   toggleDarkMode(): void {

@@ -19,16 +19,14 @@ namespace MusiCan.Server.Data
     /// </summary>
     public static class TokenUtils
     {
-        /// <summary>ein Tag in Minuten</summary>
-        public const int expiration_time = 1440;
-
         /// <summary>
         /// generiert ein JsonWebToken 
         /// </summary>
         /// <param name="user">Nutzer</param>
         /// <param name="jwt">JsonWebToken Einstellungen</param>
+        /// <param name="expiration_time">Token Auslaufzeit in Minuten</param>
         /// <returns>JsonWebToken</returns>
-        public static (string, DateTime) GenerateAccessToken(User user, Jwt jwt)
+        public static (string, DateTime) GenerateAccessToken(User user, Jwt jwt, int expiration_time)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwt.Key);

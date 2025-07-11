@@ -17,32 +17,21 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active"
-            >Home</a
-          >
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/noten" routerLinkActive="active"
-            >Noten</a
-          >
+          <a class="nav-link" routerLink="/noten" routerLinkActive="active">Noten</a>
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link"
-            routerLink="/komponisten"
-            routerLinkActive="active"
-            >Komponisten</a
-          >
+          <a class="nav-link"
+             routerLink="/komponisten"
+             routerLinkActive="active">Komponisten</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/profil" routerLinkActive="active"
-            >Profil</a
-          >
+          <a class="nav-link" routerLink="/profil" routerLinkActive="active">Profil</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/login" routerLinkActive="active"
-            >Login</a
-          >
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
         </li>
       </ul>
     </div>

@@ -2,10 +2,7 @@
 
 ## Voraussetzungen
 
-### 1. SQL Server Management Studio (SSMS) Installation
-- https://learn.microsoft.com/de-de/ssms/install/install 
-
-### 2. NuGet-Pakete wiederherstellen
+### NuGet-Pakete wiederherstellen
 ```PowerShell
 dotnet restore
 ```

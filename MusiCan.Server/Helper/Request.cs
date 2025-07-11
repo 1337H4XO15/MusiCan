@@ -19,5 +19,7 @@ namespace MusiCan.Server.Helper
 
         public required string password { get; set; }
 
+        public bool remember { get; set; }
+
     }
 }

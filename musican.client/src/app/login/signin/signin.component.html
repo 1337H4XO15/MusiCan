@@ -15,9 +15,10 @@
                class="form-control rounded-pill ps-5"
                placeholder="Benutzername" />
         <i class="bi bi-person position-absolute icon" aria-hidden="true"></i>
-        <div class="field-error" *ngIf="nameormail?.invalid && nameormail?.touched">
-          <span *ngIf="nameormail?.errors?.['required']">Benutzername benötigt</span>
-        </div>
+      </div>
+
+      <div class="field-error" *ngIf="nameormail?.invalid && nameormail?.touched">
+        <span *ngIf="nameormail?.errors?.['required']">Benutzername benötigt</span>
       </div>
 
       <div class="form-group position-relative mb-3">
@@ -28,9 +29,10 @@
                class="form-control rounded-pill ps-5"
                placeholder="Passwort" />
         <i class="bi bi-lock position-absolute icon" aria-hidden="true"></i>
-        <div class="field-error" *ngIf="password?.invalid && password?.touched">
-          <span *ngIf="password?.errors?.['required']">Passwort benötigt</span>
-        </div>
+      </div>
+
+      <div class="field-error" *ngIf="password?.invalid && password?.touched">
+        <span *ngIf="password?.errors?.['required']">Passwort benötigt</span>
       </div>
 
       <div class="d-flex justify-content-between text-white mb-3">
