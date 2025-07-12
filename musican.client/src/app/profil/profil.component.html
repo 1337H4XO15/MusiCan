@@ -3,7 +3,12 @@
 </div>
 
 @if (role == 'user'){
-    <app-userprofile />
+<app-userprofile />
 } @else if (role == 'artist') {
-    <app-artistprofile />
+<app-artistprofile />
 }
+
+<h3 class="text-white text-center mb-0 mt-5">
+  Eigene Musikstücke
+</h3>
+<app-notes [own]="true" />

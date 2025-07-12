@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-userprofile',
@@ -12,7 +13,7 @@ export class UserprofileComponent {
   isEditing = false;
   showPassword = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
     this.profileForm = this.fb.group({
       email: ['user@example.com', [Validators.required, Validators.email]],
       username: ['MaxMustermann', Validators.required],

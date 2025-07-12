@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service'; 
+
 
 @Component({
   selector: 'app-add-button',
@@ -8,7 +10,19 @@ import { Router } from '@angular/router';
   styleUrl: './add-button.component.css',
 })
 export class AddButtonComponent {
-  constructor(private router: Router) {}
+  isLoggedIn: boolean = false;
+
+  constructor(private authService: AuthService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = !!user;
+    });
+  }
 
   navigateToAddNotes() {
     this.router.navigate(['/hinzufügen']);
