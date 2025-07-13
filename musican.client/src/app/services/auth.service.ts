@@ -16,9 +16,9 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  token: string;
-  name: string;
-  expireTime: string;
+  AuthToken: string;
+  Name: string;
+  ExpireTime: string;
 }
 
 export interface User {
@@ -52,12 +52,12 @@ export class AuthService {
       .pipe(
         tap(response => {
           const user: User = {
-            name: response.name,
-            token: response.token
+            name: response.Name,
+            token: response.AuthToken
           };
 
           localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('tokenExpiry', response.expireTime);
+          localStorage.setItem('tokenExpiry', response.ExpireTime);
           this.currentUserSubject.next(user);
         })
       );
@@ -68,12 +68,12 @@ export class AuthService {
       .pipe(
         tap(response => {
           const user: User = {
-            name: response.name,
-            token: response.token
+            name: response.Name,
+            token: response.AuthToken
           };
 
           localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('tokenExpiry', response.expireTime);
+          localStorage.setItem('tokenExpiry', response.ExpireTime);
           this.currentUserSubject.next(user);
         })
       );
@@ -86,13 +86,13 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  isLoggedIn(): boolean {
-    const user = this.currentUserSubject.value;
-    return user !== null && this.isTokenValid(user.token);
-  }
-
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
+  }
+
+  isLoggedIn(): boolean {
+    const user = this.getCurrentUser();
+    return user !== null && this.isTokenValid(user.token);
   }
 
   getToken(): string | null {

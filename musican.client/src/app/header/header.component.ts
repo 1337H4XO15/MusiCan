@@ -21,10 +21,7 @@ export class HeaderComponent implements OnInit {
   }
 
   checkLoginStatus(): void {
-    this.authService.currentUser$.subscribe(user => {
-      this.isLoggedIn = !!user;
-    });
-    //this.isLoggedIn = this.authService.isLoggedIn();
+    this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   toggleDarkMode(): void {
