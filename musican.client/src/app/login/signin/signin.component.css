@@ -36,8 +36,17 @@
   pointer-events: none;
 }
 
-.form-check-input:checked {
-  background-color: #14334f;
-  border-color: #14334f;
-  box-shadow: 0 0 0 0.25rem rgba(37, 150, 190, 0.25);
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 78, 78, 0.15);
+  color: #ff4e4e;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(255, 78, 78, 0.08);
 }
