@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Profile } from '../profil.component';
 
 @Component({
   selector: 'app-artistprofile',
@@ -7,21 +8,27 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './artistprofile.component.html',
   styleUrl: './artistprofile.component.css'
 })
-export class ArtistprofileComponent {
-  artistForm: FormGroup;
-  isEditing = false;
-  showPassword = false;
+export class ArtistprofileComponent implements OnInit {
+  artistForm!: FormGroup; // Non-null assertion
+  isEditing: boolean = false;
+  showPassword: boolean = false;
 
   constructor(private fb: FormBuilder) {
+
+  }
+
+  @Input() profile!: Profile;
+
+  ngOnInit(): void {
     this.artistForm = this.fb.group({
       profileImage: ['https://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg'],
-      username: ['Ludwig van Beethoven', Validators.required],
-      email: ['beethoven@classicmail.com', [Validators.required, Validators.email]],
-      password: ['symphonie9', Validators.minLength(6)],
-      birthYear: ['1770', Validators.required],
-      genre: ['Klassik', Validators.required],
-      country: ['Deutschland', Validators.required],
-      description: ['Komponist von Symphonien, Sonaten und Meisterwerken.']
+      username: [this.profile.name, Validators.required],
+      email: [this.profile.mail, [Validators.required, Validators.email]],
+      /*password: ['symphonie9', Validators.minLength(6)],*/
+      birthYear: [this.profile.name, Validators.required],
+      genre: [this.profile.genre, Validators.required],
+      country: [this.profile.country, Validators.required],
+      description: [this.profile.discription]
     });
   }
 

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { Profile, UserRole } from '../profil.component';
 
 @Component({
   selector: 'app-userprofile',
@@ -8,18 +8,39 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './userprofile.component.html',
   styleUrl: './userprofile.component.css',
 })
-export class UserprofileComponent {
-  profileForm: FormGroup;
-  isEditing = false;
-  showPassword = false;
+export class UserprofileComponent implements OnInit, OnChanges {
+  profileForm!: FormGroup; // Non-null assertion
+  isEditing: boolean = false;
+  showPassword: boolean = false;
+  error: boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
-    this.profileForm = this.fb.group({
-      email: ['user@example.com', [Validators.required, Validators.email]],
-      username: ['MaxMustermann', Validators.required],
-      password: ['123456', Validators.minLength(6)],
-      role: ['user', Validators.required],
-    });
+  constructor(private fb: FormBuilder) {
+
+  }
+
+  @Input() profile!: Profile;
+
+  ngOnInit(): void {
+    this.initializeForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['profile'] && changes['profile'].currentValue) {
+      this.initializeForm();
+    }
+  }
+
+  private initializeForm(): void {
+    if (this.profile && JSON.stringify(this.profile) !== '{}') {
+      this.profileForm = this.fb.group({
+        username: [this.profile.name, Validators.required],
+        email: [this.profile.mail, [Validators.required, Validators.email]],
+        role: [this.profile.role, Validators.required],
+      });
+      this.error = false;
+    } else {
+      this.error = true;
+    }
   }
 
   toggleEdit() {
@@ -34,7 +55,7 @@ export class UserprofileComponent {
   }
 
   toggleRole(event: any) {
-    const newRole = event.target.checked ? 'artist' : 'user';
+    const newRole = event.target.checked ? UserRole.Artist : UserRole.User;
     this.profileForm.patchValue({ role: newRole });
   }
 

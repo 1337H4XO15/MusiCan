@@ -2,11 +2,8 @@
   <img src="/background.jpg" class="bg-img" alt="Background" />
 </div>
 
-@if (role == 'user'){
-<app-userprofile />
-} @else if (role == 'artist') {
-<app-artistprofile />
-}
+<app-userprofile *ngIf="!isArtist" [profile]="profile" />
+<app-artistprofile *ngIf="isArtist" [profile]="profile"/>
 
 <h3 class="text-white text-center mb-0 mt-5">
   Eigene Musikstücke
