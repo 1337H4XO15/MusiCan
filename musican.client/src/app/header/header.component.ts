@@ -8,29 +8,22 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  isDarkMode: boolean = false;
   isLoggedIn: boolean = false;
+
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    const stored = localStorage.getItem('darkmode');
-    this.isDarkMode = stored === 'true';
-    this.applyDarkMode();
     this.checkLoginStatus();
   }
 
   checkLoginStatus(): void {
-    this.isLoggedIn = this.authService.isLoggedIn();
+    this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = user !== null;
+    }); //nicht ändern, this.authService.isLoggedIn() kann nicht subscibed werden, deshalb funktioniert es damit nicht
   }
 
-  toggleDarkMode(): void {
-    this.isDarkMode = !this.isDarkMode;
-    localStorage.setItem('darkmode', String(this.isDarkMode));
-    this.applyDarkMode();
-  }
-
-  applyDarkMode(): void {
-    document.body.classList.toggle('dark-mode', this.isDarkMode);
+  logout(): void {
+    this.authService.logout();
   }
 }

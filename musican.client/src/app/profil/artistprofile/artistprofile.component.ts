@@ -36,7 +36,7 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
         profileImage: ['https://upload.wikimedia.org/wikipedia/commons/6/6f/Beethoven.jpg'],
         username: [this.profile.name, Validators.required],
         email: [this.profile.mail, [Validators.required, Validators.email]],
-        /*password: ['symphonie9', Validators.minLength(6)],*/
+        password: ['', [Validators.required, Validators.minLength(6)]],
         birthYear: [this.profile.name, Validators.required],
         genre: [this.profile.genre, Validators.required],
         country: [this.profile.country, Validators.required],

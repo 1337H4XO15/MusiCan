@@ -20,6 +20,22 @@ export class SignupComponent {
     private authService: AuthService,
     private router: Router
   ) {
+
+    /*
+      this.registerForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      name: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
+      isComposer: [false],
+      profilePicture: [''],
+      genre: [''],
+      birthYear: [''],
+      country: [''],
+      description: ['']
+    });
+    */
+
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', Validators.required],

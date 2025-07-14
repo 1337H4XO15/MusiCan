@@ -25,6 +25,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { AddButtonComponent } from './add-button/add-button.component';
 import { AuthGuard } from './services/auth.guard';
 import { AuthInterceptor } from './services/auth.interceptor';
+import { BackbtnComponent } from './notes/show-notes/backbtn/backbtn.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -52,6 +54,8 @@ const routes: Routes = [
     AddNotesComponent,
     ShowNotesComponent,
     AddButtonComponent,
+    BackbtnComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,

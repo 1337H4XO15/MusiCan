@@ -7,14 +7,21 @@ import { Component, Input } from '@angular/core';
   styleUrl: './notes.component.css',
 })
 export class NotesComponent {
-  @Input() random: boolean = false; // ✅ Standardwert
+  @Input() random: boolean = false; // Standardwert
+  @Input() own: boolean = false; //nur eigene Musikstücke anzeigen
 
   ngOnInit() {
     if (this.random) {
       //Musik laden
+    } else if (this.own) {
+      //Musik laden
     } else {
       //Musik laden
     }
+  }
+
+  get showPublicPieces(): boolean {
+    return !(this.random || this.own);
   }
 
   musicPieces = [
