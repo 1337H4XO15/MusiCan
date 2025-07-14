@@ -25,13 +25,12 @@ export class SigninComponent implements OnInit {
     this.loginForm = this.fb.group({
       nameormail: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      remember: [false]
     });
   }
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/home']);
     }
   }
 
@@ -43,11 +42,11 @@ export class SigninComponent implements OnInit {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.loadingChange.emit(false);
-          this.router.navigate(['/']);
+          this.router.navigate(['/home']);
         },
         error: (error) => {
           this.loadingChange.emit(false);
-          this.errorChange.emit(error.error || 'Login failed');
+          this.errorChange.emit('Login failed: Username or Password are wrong');
         }
       });
     }

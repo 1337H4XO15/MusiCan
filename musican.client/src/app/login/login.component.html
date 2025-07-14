@@ -5,21 +5,21 @@
 <div>
   <!-- Error Display -->
   @if (error) {
-  <div class="error-message" role="alert" aria-live="assertive">
-    <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+  <div class="error-message ms-3 me-3" role="alert" aria-live="assertive">
+    <i class="bi bi-exclamation-circle error-icon"></i>
     <span class="visually-hidden">Error: </span>
-    {{ error }}
+    <span class="error-text">{{ error }}</span>
   </div>
   }
 
   @if(isLoginMode) {
   <app-signin (modeChange)="onModeChange($event)"
-      (loadingChange)="onLoadingChange($event)"
-      (errorChange)="onErrorChange($event)" />
+              (loadingChange)="onLoadingChange($event)"
+              (errorChange)="onErrorChange($event)" />
   } @else {
   <app-signup (modeChange)="onModeChange($event)"
-      (loadingChange)="onLoadingChange($event)"
-      (errorChange)="onErrorChange($event)" />
+              (loadingChange)="onLoadingChange($event)"
+              (errorChange)="onErrorChange($event)" />
   }
 </div>
 

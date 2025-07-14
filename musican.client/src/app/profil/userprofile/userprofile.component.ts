@@ -35,6 +35,7 @@ export class UserprofileComponent implements OnInit, OnChanges {
       this.profileForm = this.fb.group({
         username: [this.profile.name, Validators.required],
         email: [this.profile.mail, [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
         role: [this.profile.role, Validators.required],
       });
       this.error = false;

@@ -99,6 +99,11 @@ input:focus {
   box-shadow: none;
 }
 
+input::placeholder {
+  color: white;
+  opacity: 0.7;
+}
+
 .btn-primary {
   --bs-btn-color: white;
   --bs-btn-bg: #14334f;

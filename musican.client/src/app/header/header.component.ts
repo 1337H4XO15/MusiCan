@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
 
+
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -17,7 +18,9 @@ export class HeaderComponent implements OnInit {
   }
 
   checkLoginStatus(): void {
-    this.isLoggedIn = this.authService.isLoggedIn();
+    this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = user !== null;
+    }); //nicht ändern, this.authService.isLoggedIn() kann nicht subscibed werden, deshalb funktioniert es damit nicht
   }
 
   logout(): void {
