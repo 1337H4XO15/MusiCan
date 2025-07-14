@@ -18,7 +18,7 @@ export interface ProfileResponse {
   birtyear: string;
   genre: string;
   country: string;
-  discription: string;
+  description: string;
 }
 
 export interface Profile {
@@ -28,7 +28,7 @@ export interface Profile {
   birtyear?: Date;
   genre?: string;
   country?: string;
-  discription?: string;
+  description?: string;
   error?: string;
 }
 
@@ -81,7 +81,7 @@ export class ProfilComponent implements OnInit {
             profile.birtyear = new Date(response.birtyear);
             profile.genre = response.genre;
             profile.country = response.country;
-            profile.discription = response.discription;
+            profile.description = response.description;
           }
 
           this.profile = profile;

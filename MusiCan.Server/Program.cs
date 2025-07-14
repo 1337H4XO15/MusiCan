@@ -7,7 +7,7 @@ using MusiCan.Server.Services;
 using Serilog;
 using System.Text;
 
-const string version = "0.0.2";
+const string version = "0.0.3";
 
 Serilog.Log.Logger = new LoggerConfiguration()
 //.MinimumLevel.Information()
@@ -76,6 +76,7 @@ builder.Services.AddAuthorization(options =>
 // Authentication bereitstellen
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IMusicService, MusicService>();
 builder.Services.AddScoped<DataContext>();
 
 var app = builder.Build();

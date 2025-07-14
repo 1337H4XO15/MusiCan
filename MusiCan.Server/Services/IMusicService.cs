@@ -1,0 +1,186 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using MusiCan.Server.Data;
+using MusiCan.Server.DatabaseContext;
+using MusiCan.Server.Helper;
+using Serilog;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MusiCan.Server.Services
+{
+    public interface IMusicService
+    {
+        /// <summary>
+        /// Erstellt einen Musik Eintrag
+        /// </summary>
+        /// <param name="music">Musik Eintrag</param>
+        /// <returns>True bei Erfolg</returns>
+        Task<bool> CreateMusicAsync(Music music);
+
+        /// <summary>
+        /// Bearbeitet einen Musik Eintrag
+        /// </summary>
+        /// <param name="musicId">Musik ID</param>
+        /// <param name="request">neue Musik Daten</param>
+        /// <returns>Musik oder Error</returns>
+        Task<(Music?, string)> UpdateMusicAsync(MusicRequest request);
+
+        /// <summary>
+        /// Löscht einen Musik Eintrag
+        /// </summary>
+        /// <param name="musicId">Musik Eintrag ID</param>
+        /// <returns></returns>
+        Task<bool> DeleteMusicByIdAsync(Guid musicId);
+
+        /// <summary>
+        /// Holt zufällig 10 Musik Einträge, die öffentlich zugänglich sind
+        /// </summary>
+        /// <returns>Liste mit den Musik Einträgen</returns>
+        Task<List<Music>> GetRandomMusicAsync();
+
+        /// <summary>
+        /// Holt alle Musik Einträge des Nutzers 
+        /// </summary>
+        /// <param name="userId">Nutzer ID</param>
+        /// <returns>Liste mit den Musik Einträgen</returns>
+        Task<List<Music>> GetMusicByUserIdAsync(Guid userId);
+    }
+
+    public class MusicService : IMusicService
+    {
+        private readonly DataContext _dataContext;
+
+        public MusicService(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+
+        public async Task<bool> CreateMusicAsync(Music music)
+        {
+            var transaction = _dataContext.Database.BeginTransaction();
+
+            try
+            {
+                _dataContext.Add(music);
+
+                await _dataContext.SaveChangesAsync();
+
+                transaction.Commit();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Log.Error($"Error while creating music {ex}");
+                return false; // schreiben in DB fehlgeschlagen
+            }
+        }
+
+        public async Task<(Music?, string)> UpdateMusicAsync(MusicRequest request)
+        {
+            using var transaction = await _dataContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                if (request.id == Guid.Empty)
+                {
+                    return (null, "Music not found.");
+                }
+
+                var music = await _dataContext.Musics
+                    .FirstOrDefaultAsync(m => m.MusicId == request.id);
+
+                if (music == null)
+                {
+                    return (null, "Music not found.");
+                }
+
+
+                if (string.IsNullOrEmpty(request.title) || string.IsNullOrEmpty(request.composer)
+                    || string.IsNullOrEmpty(request.mimetype) || request.file.Length == 0)
+                {
+                    return (null, "Missing Music Attributes.");
+                }
+
+                music.Title = request.title;
+                music.Composer = request.composer; // owner?
+                music.Publication = request.releaseyear;
+                music.Genre = request.genre;
+                music.ContentType = request.mimetype;
+                music.FileData = request.file;
+                music.Timestamp = DateTime.Now;
+
+                await _dataContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                Log.Information($"Music {request.id} updated successfully.");
+
+                return (music, "");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Log.Error($"Error while updating music {ex}");
+            }
+            return (null, "Something unexpected happend.");
+        }
+
+        public async Task<bool> DeleteMusicByIdAsync(Guid musicId)
+        {
+            using var transaction = await _dataContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                var music = await _dataContext.Musics
+                    .FirstOrDefaultAsync(m => m.MusicId == musicId);
+
+                if (music == null)
+                {
+                    return false;
+                }
+
+                _dataContext.Musics.Remove(music);
+
+                await _dataContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Log.Error($"Error while deleting music {ex}");
+            }
+
+            return false;
+        }
+
+        public async Task<List<Music>> GetRandomMusicAsync()
+        {
+            Random rng = new Random();
+            return await _dataContext.Musics
+                .Include(m => m.UserMusics)
+                    .ThenInclude(um => um.User)
+                        .ThenInclude(u => u.Composer)
+                .Where(m => m.Public)
+                .OrderBy(_ => rng.Next()).Take(10).ToListAsync();
+        }
+
+        public async Task<List<Music>> GetMusicByUserIdAsync(Guid userId)
+        {
+            return await _dataContext.Musics
+                .Include(m => m.UserMusics)
+                .Where(m => m.UserMusics.Any(um => um.Access == Access.Owner && um.UserId == userId))
+                .ToListAsync();
+        }
+
+    }
+
+}

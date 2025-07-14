@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace MusiCan.Server.Helper
@@ -82,8 +83,52 @@ namespace MusiCan.Server.Helper
         public DateTime? BirthYear { get; set; }
         public string? Genre { get; set; }
         public string? Country { get; set; }
-        public string? Discription { get; set; }
+        public string? Description { get; set; }
     }
 
+    public class DisplayComposer
+    {
+        public Guid Id { get; set; }
+
+        public string ArtistName { get; set; }
+
+        public string Genre { get; set; }
+
+        public DateTime BirthYear { get; set; }
+
+        public string Country { get; set; }
+
+        public string Description { get; set; }
+    }
+
+    public class MusicOwner
+    {
+        public Guid Id { get; set; }
+
+        public string Name { get;  set; }
+
+        public bool isComposer { get; set; }
+    }
+
+    public class DisplayMusic
+    {
+        public Guid Id { get; set; }
+
+        public string Title { get; set; }
+
+        public string Composer { get; set; }
+
+        public string ContentType { get; set; }
+
+        public byte[] FileData { get; set; }
+
+        public DateTime? Publication { get; set; }
+
+        public string? Genre { get; set; }
+
+        public DateTime Timestamp { get; set; }
+
+        public MusicOwner? Owner { get; set; }
+    }
 }
 

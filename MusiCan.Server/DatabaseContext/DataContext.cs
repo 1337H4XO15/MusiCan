@@ -8,6 +8,7 @@ namespace MusiCan.Server.DatabaseContext
         private readonly DbContext _dataContext;
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Music> Musics { get; set; }
+        public virtual DbSet<Composer> Composers { get; set; }
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
             _dataContext = this;

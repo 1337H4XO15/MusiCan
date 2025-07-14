@@ -24,9 +24,11 @@ namespace MusiCan.Server.Data
 
         //public string? ProfileImageContentType { get; set; }
 
+        public DateTime? UpdatedAt { get; set; }
+
         public ICollection<UserMusic> UserMusics { get; set; }
 
-        public Composer? Composer { get; set; }
+        public Composer? Composer { get; set; } 
 
         // Parameterloser Konstruktor für EF Core
         public User() { }

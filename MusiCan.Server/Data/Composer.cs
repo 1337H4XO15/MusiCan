@@ -23,7 +23,7 @@ namespace MusiCan.Server.Data
         [MaxLength(32)]
         public string Country { get; set; }
 
-        public string Discription { get; set; }
+        public string Description { get; set; }
 
         public User User { get; set; }
 
