@@ -2,9 +2,10 @@
   <img src="/background.jpg" class="bg-img" alt="Background" />
 </div>
 
+
 <div class="container py-5">
-  @if(!this.random) {
-  <h2 class="text-center text-white mb-5">Gespeicherte Musikstücke</h2>
+  @if(showPublicPieces) {
+  <h2 class="text-center text-white mb-5">Öffentliche Musikstücke</h2>
   }
 
   <div class="row g-4">

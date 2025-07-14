@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-grayblue navbar-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/">Mozart's Music Matrix</a>
+    <a class="navbar-brand" routerLink="/home">Mozart's Music Matrix</a>
 
     <button
       class="navbar-toggler"
@@ -27,12 +27,18 @@
              routerLink="/komponisten"
              routerLinkActive="active">Komponisten</a>
         </li>
+        @if (!isLoggedIn) {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+        </li>
+        } @else {
         <li class="nav-item">
           <a class="nav-link" routerLink="/profil" routerLinkActive="active">Profil</a>
         </li>
-        <li class="nav-item" *ngIf="!isLoggedIn">
-          <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">Logout</a>
         </li>
+        }
       </ul>
     </div>
   </div>

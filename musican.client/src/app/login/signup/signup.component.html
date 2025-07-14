@@ -4,56 +4,94 @@
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="form-group position-relative mb-3">
-        <input
-          type="email"
-          id="email"
-          class="form-control rounded-pill ps-5"
-          placeholder="email"
-          formControlName="email"
-        />
+        <input type="email"
+               id="email"
+               class="form-control rounded-pill ps-5"
+               placeholder="email"
+               formControlName="email" />
         <i class="bi bi-envelope position-absolute icon"></i>
       </div>
 
       <div class="form-group position-relative mb-3">
-        <input
-          type="text"
-          id="name"
-          class="form-control rounded-pill ps-5"
-          placeholder="Benutzername"
-          formControlName="name"
-        />
+        <input type="text"
+               id="name"
+               class="form-control rounded-pill ps-5"
+               placeholder="Benutzername"
+               formControlName="name" />
         <i class="bi bi-person position-absolute icon"></i>
       </div>
 
       <div class="form-group position-relative mb-3">
-        <input
-          type="password"
-          id="password"
-          class="form-control rounded-pill ps-5"
-          placeholder="Passwort"
-          formControlName="password"
-        />
+        <input type="password"
+               id="password"
+               class="form-control rounded-pill ps-5"
+               placeholder="Passwort"
+               formControlName="password" />
         <i class="bi bi-lock position-absolute icon"></i>
       </div>
 
       <div class="form-group position-relative mb-3">
-        <input
-          type="password"
-          id="confirmPassword"
-          class="form-control rounded-pill ps-5"
-          placeholder="Passwort wiederholen"
-          formControlName="confirmPassword"
-        />
+        <input type="password"
+               id="confirmPassword"
+               class="form-control rounded-pill ps-5"
+               placeholder="Passwort wiederholen"
+               formControlName="confirmPassword" />
         <i class="bi bi-lock position-absolute icon"></i>
       </div>
 
+      <div *ngIf="registerForm.get('isComposer')?.value">
+        <label for="profilePicture" class="form-label text-white">Profilbild</label>
+        <div class="form-group position-relative mb-3">
+          <input type="file"
+                 id="profilePicture"
+                 class="form-control rounded-pill ps-5"
+                 placeholder="Benutzername"
+                 formControlName="profilePicture" />
+          <i class="bi bi-file-image position-absolute icon"></i>
+        </div>
+
+        <div class="form-group position-relative mb-3">
+          <input type="text"
+                 id="genre"
+                 class="form-control rounded-pill ps-5"
+                 placeholder="Genre"
+                 formControlName="genre" />
+          <i class="bi bi-music-note-beamed position-absolute icon"></i>
+        </div>
+
+        <div class="form-group position-relative mb-3">
+          <input type="number"
+                 id="birthYear"
+                 class="form-control rounded-pill ps-5"
+                 placeholder="Geburtsjahr"
+                 formControlName="birthYear" />
+          <i class="bi bi-calendar-fill position-absolute icon"></i>
+        </div>
+
+        <div class="form-group position-relative mb-3">
+          <input type="text"
+                 id="country"
+                 class="form-control rounded-pill ps-5"
+                 placeholder="(Herkunfts-) Land"
+                 formControlName="country" />
+          <i class="bi bi-globe-europe-africa-fill position-absolute icon"></i>
+        </div>
+
+        <div class="form-group position-relative mb-3">
+          <label for="description" class="form-label text-white">Beschreibung</label>
+          <textarea id="description"
+                    class="form-control rounded-pill ps-5"
+                    placeholder="Beschreibung"
+                    formControlName="description">
+          </textarea>
+        </div>
+      </div>
+
       <div class="form-check mb-3">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          formControlName="isComposer"
-          id="isComposer"
-        />
+        <input class="form-check-input"
+               type="checkbox"
+               formControlName="isComposer"
+               id="isComposer" />
         <label class="form-check-label" for="isComposer">
           Ich bin Komponist/Künstler
         </label>

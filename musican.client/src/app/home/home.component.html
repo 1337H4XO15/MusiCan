@@ -7,7 +7,7 @@
     <i class="bi bi-music-note-list me-2"></i> Mozarts Music Matrix
   </h1>
   <p class="lead text-light mb-4">
-    Deine persönliche Plattform zur Verwaltung klassischer Musiknoten.
+    Die Plattform zur Verwaltung deiner Musiknoten.
   </p>
 
   <button
@@ -21,9 +21,9 @@
     {{ isLoggedIn ? "Noten hochladen" : "Einloggen / Registrieren" }}
   </button>
 
-  <h4 class="text-white mb-4">
+  <h3 class="text-white mb-0">
     <i class="bi bi-stars me-2"></i> Zufällige Musikstücke
-  </h4>
+  </h3>
 
   <app-notes [random]="true"/>
 </div>

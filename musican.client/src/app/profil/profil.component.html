@@ -4,3 +4,8 @@
 
 <app-userprofile *ngIf="!isArtist" [profile]="profile" />
 <app-artistprofile *ngIf="isArtist" [profile]="profile"/>
+
+<h3 class="text-white text-center mb-0 mt-5">
+  Eigene Musikstücke
+</h3>
+<app-notes [own]="true" />

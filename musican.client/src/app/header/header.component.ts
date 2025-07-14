@@ -8,15 +8,11 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit {
-  isDarkMode: boolean = false;
   isLoggedIn: boolean = false;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    const stored = localStorage.getItem('darkmode');
-    this.isDarkMode = stored === 'true';
-    this.applyDarkMode();
     this.checkLoginStatus();
   }
 
@@ -24,13 +20,7 @@ export class HeaderComponent implements OnInit {
     this.isLoggedIn = this.authService.isLoggedIn();
   }
 
-  toggleDarkMode(): void {
-    this.isDarkMode = !this.isDarkMode;
-    localStorage.setItem('darkmode', String(this.isDarkMode));
-    this.applyDarkMode();
-  }
-
-  applyDarkMode(): void {
-    document.body.classList.toggle('dark-mode', this.isDarkMode);
+  logout(): void {
+    this.authService.logout();
   }
 }
