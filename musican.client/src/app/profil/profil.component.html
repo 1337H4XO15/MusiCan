@@ -2,8 +2,8 @@
   <img src="/background.jpg" class="bg-img" alt="Background" />
 </div>
 
-<app-userprofile *ngIf="!isArtist" [profile]="profile" />
-<app-artistprofile *ngIf="isArtist" [profile]="profile"/>
+<app-userprofile *ngIf="!isArtist" [profile]="profile" [postProfileFn]="postProfileFn" [edit]="edit"  (switchToArtist)="onSwitch($event)"/>
+<app-artistprofile *ngIf="isArtist" [profile]="profile" [postProfileFn]="postProfileFn" [edit]="edit"  (switchToArtist)="onSwitch($event)"/>
 
 <h3 class="text-white text-center mb-0 mt-5">
   Eigene Musikstücke

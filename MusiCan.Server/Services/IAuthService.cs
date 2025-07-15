@@ -43,14 +43,9 @@ namespace MusiCan.Server.Services
         Task<User?> AuthenticateAsync(string namemail, string password);
     }
 
-    public class AuthService : IAuthService
+    public class AuthService(DataContext dataContext) : IAuthService
     {
-        private readonly DataContext _dataContext;
-
-        public AuthService(DataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
+        private readonly DataContext _dataContext = dataContext;
 
         public async Task<bool> CheckUserNameAsync(string username)
         {

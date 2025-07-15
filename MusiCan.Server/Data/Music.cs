@@ -37,19 +37,22 @@ namespace MusiCan.Server.Data
             Guid musicId = Guid.NewGuid();
             MusicId = musicId;
             Title = request.title;
-            Composer = request.composer;
+            Composer = request.author;
             ContentType = request.mimetype;
-            FileData = request.file;
-            Publication = request.releaseyear;
+            FileData = request.file_b;
+            if (int.TryParse(request.releaseYear, out int year))
+            {
+                Publication = new DateTime(year, 1, 1);
+            }
             Genre = request.genre;
             Timestamp = DateTime.Now;
-            UserMusics = new List<UserMusic> { new UserMusic
+            UserMusics = [ new UserMusic
             {
                 LinkId = Guid.NewGuid(),
                 UserId = user.UserId,
                 MusicId = musicId,
                 Access = Access.Owner
-            } };
+            } ];
             Public = user.Composer != null;
         }
     }

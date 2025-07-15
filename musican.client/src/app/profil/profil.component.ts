@@ -3,6 +3,7 @@ import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { FormGroup } from '@angular/forms';
 
 export enum UserRole {
   Admin = 0,
@@ -42,6 +43,8 @@ export class ProfilComponent implements OnInit {
   private apiUrl = 'https://localhost:7012/Profile';
   profile!: Profile; // Non-null assertion
   isArtist: boolean = false;
+  edit: boolean = false;
+  postProfileFn = this.postProfile.bind(this); // Forwarding von http
 
   constructor(private http: HttpClient,
     private router: Router,
@@ -61,7 +64,12 @@ export class ProfilComponent implements OnInit {
       error: (error) => {
         console.error('Failed to load profile:', error);
       }
-    })
+    });
+  }
+
+  onSwitch(event: { isArtist: boolean, isEdit: boolean }) {
+    this.isArtist = event.isArtist;
+    this.edit = event.isEdit;
   }
 
   getProfile(): Observable<ProfileResponse> {
@@ -69,27 +77,37 @@ export class ProfilComponent implements OnInit {
     return this.http.get<ProfileResponse>(`${this.apiUrl}/profile`)
       .pipe(
         tap(response => {
-          console.log("Profile response:", response);
-          let profile: Profile = {
-            name: response.name,
-            mail: response.mail,
-            role: response.role as UserRole
-          };
-
-          if (profile.role == UserRole.Artist) {
-            this.isArtist = true;
-            profile.birtyear = new Date(response.birtyear);
-            profile.genre = response.genre;
-            profile.country = response.country;
-            profile.description = response.description;
-          }
-
-          this.profile = profile;
-        }),
-        catchError(err => {
-          console.error('Profile request error:', err);
-          return throwError(() => err);
+          this.handleProfileResponse(response);
         })
       );
+  }
+
+  postProfile(profileGroup: FormGroup): Observable<ProfileResponse> {
+
+    return this.http.post<ProfileResponse>(`${this.apiUrl}/profile`, profileGroup.value)
+      .pipe(
+        tap(response => {
+          this.handleProfileResponse(response);
+        })
+    )
+  }
+
+  private handleProfileResponse(response: ProfileResponse): void {
+    console.log("Profile response:", response);
+    let profile: Profile = {
+      name: response.name,
+      mail: response.mail,
+      role: response.role as UserRole
+    };
+
+    if (profile.role == UserRole.Artist) {
+      this.isArtist = true;
+      profile.birtyear = new Date(response.birtyear);
+      profile.genre = response.genre;
+      profile.country = response.country;
+      profile.description = response.description;
+    }
+
+    this.profile = profile;
   }
 }

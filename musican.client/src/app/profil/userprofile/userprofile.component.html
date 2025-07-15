@@ -21,14 +21,14 @@
 
       <div class="profile-item">
         <label>Nutzername:</label>
-        <input *ngIf="isEditing" formControlName="username" type="text" class="form-control"/>
-        <span *ngIf="!isEditing">{{ profileForm.value.username }}</span>
+        <input *ngIf="isEditing" formControlName="name" type="text" class="form-control"/>
+        <span *ngIf="!isEditing">{{ profileForm.value.name }}</span>
       </div>
       <div
         class="form-text text-danger"
         *ngIf="
-          profileForm.get('username')?.touched &&
-          profileForm.get('username')?.invalid
+          profileForm.get('name')?.touched &&
+          profileForm.get('name')?.invalid
         "
         style="font-size: 0.875rem; margin-top: -0.5rem"
       >
@@ -68,9 +68,9 @@
           <label class="switch">
             <input
               type="checkbox"
-              [checked]="profileForm.value.role === 'artist'"
-              (change)="toggleRole($event)"
-            />
+              formControlName="isComposer"
+              id="isComposer"
+              (change)="toggleRole($event)"/>
             <span class="slider round"></span>
           </label>
           <span>Künstler</span>
@@ -78,7 +78,7 @@
 
         <!-- Nur Info-Text im Lesemodus -->
         <span *ngIf="!isEditing">
-          {{ profileForm.value.role === "artist" ? "Künstler" : "Nutzer" }}
+          {{ profileForm.value.isComposer ? "Künstler" : "Nutzer" }}
         </span>
       </div>
 

@@ -49,14 +49,9 @@ namespace MusiCan.Server.Services
         Task<List<Composer>> GetAllComposerAsync();
     }
 
-    public class ProfileService : IProfileService
+    public class ProfileService(DataContext dataContext) : IProfileService
     {
-        private readonly DataContext _dataContext;
-
-        public ProfileService(DataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
+        private readonly DataContext _dataContext = dataContext;
 
         public async Task<User?> GetUserByIdAsync(Guid id)
         {
@@ -109,12 +104,12 @@ namespace MusiCan.Server.Services
                 user.EMail = request.email;
                 if (user.Role != Roles.Admin && user.Role != Roles.Banned)
                 {
-                    user.Role = request.iscomposer ? Roles.Kuenstler : Roles.Nutzer;
+                    user.Role = request.isComposer ? Roles.Kuenstler : Roles.Nutzer;
                 }
                 user.UpdatedAt = DateTime.UtcNow;
 
                 // Komponist
-                if (request.iscomposer)
+                if (request.isComposer)
                 {
                     if (user.Composer == null)
                     {
@@ -122,7 +117,7 @@ namespace MusiCan.Server.Services
                     }
 
                     if (string.IsNullOrEmpty(request.genre) || string.IsNullOrEmpty(request.country) 
-                        || string.IsNullOrEmpty(request.description) || !request.birthyear.HasValue)
+                        || string.IsNullOrEmpty(request.description) || !request.birthYear.HasValue)
                     {
                         return (null, "Missing Composer Attributes.");
                     }
@@ -130,7 +125,7 @@ namespace MusiCan.Server.Services
                     user.Composer.Genre = request.genre;
                     user.Composer.Country = request.country;
                     user.Composer.Description = request.description;
-                    user.Composer.BirthYear = request.birthyear ?? DateTime.MinValue; // Der Fall tritt nicht ein, wird vorher geprüft
+                    user.Composer.BirthYear = request.birthYear ?? DateTime.MinValue; // Der Fall tritt nicht ein, wird vorher geprüft
                 }
 
                 await _dataContext.SaveChangesAsync();

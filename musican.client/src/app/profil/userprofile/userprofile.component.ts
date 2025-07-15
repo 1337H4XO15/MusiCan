@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Profile, UserRole } from '../profil.component';
+import { Profile, ProfileResponse, UserRole } from '../profil.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-userprofile',
@@ -19,12 +20,19 @@ export class UserprofileComponent implements OnInit, OnChanges {
   }
 
   @Input() profile!: Profile;
+  @Input() postProfileFn!: (profileGroup: FormGroup) => Observable<ProfileResponse>;
+  @Input() edit!: boolean;
+  @Output() switchToArtist = new EventEmitter<{ isArtist: boolean, isEdit: boolean }>();
 
   ngOnInit(): void {
+    this.isEditing = this.edit;
     this.initializeForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['edit']) {
+      this.isEditing = changes['edit'].currentValue;
+    }
     if (changes['profile'] && changes['profile'].currentValue) {
       this.initializeForm();
     }
@@ -33,10 +41,10 @@ export class UserprofileComponent implements OnInit, OnChanges {
   private initializeForm(): void {
     if (this.profile && JSON.stringify(this.profile) !== '{}') {
       this.profileForm = this.fb.group({
-        username: [this.profile.name, Validators.required],
+        name: [this.profile.name, Validators.required],
         email: [this.profile.mail, [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
-        role: [this.profile.role, Validators.required],
+        isComposer: [false]
       });
       this.error = false;
     } else {
@@ -56,8 +64,7 @@ export class UserprofileComponent implements OnInit, OnChanges {
   }
 
   toggleRole(event: any) {
-    const newRole = event.target.checked ? UserRole.Artist : UserRole.User;
-    this.profileForm.patchValue({ role: newRole });
+    this.switchToArtist.emit({ isArtist: true, isEdit: this.isEditing });
   }
 
   saveProfile() {
@@ -66,7 +73,15 @@ export class UserprofileComponent implements OnInit, OnChanges {
       return;
     }
 
-    console.log('Profil wird gespeichert:', this.profileForm.value);
+    this.postProfileFn(this.profileForm).subscribe({
+      next: (response) => {
+        console.log('Profile saved successfully');
+      },
+      error: (error) => {
+        console.error('Failed to load profile:', error);
+      }
+    });
+
     this.toggleEdit();
   }
 }

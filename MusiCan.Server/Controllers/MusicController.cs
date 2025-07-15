@@ -17,16 +17,10 @@ namespace MusiCan.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class MusicController : ControllerBase
+    public class MusicController(IMusicService musicService, IProfileService profileService) : ControllerBase
     {
-        private readonly IMusicService _musicService;
-        private readonly IProfileService _profileService;
-
-        public MusicController(IMusicService musicService, IProfileService profileService)
-        {
-            _musicService = musicService;
-            _profileService = profileService;
-        }
+        private readonly IMusicService _musicService = musicService;
+        private readonly IProfileService _profileService = profileService;
 
         [HttpGet("randomMusic")]
         [Authorize(Policy = "NotBanned")]
@@ -36,7 +30,7 @@ namespace MusiCan.Server.Controllers
             {
                 List<Music> musics = await _musicService.GetRandomMusicAsync();
 
-                List<DisplayMusic> response = musics.Select(music => new DisplayMusic
+                List<DisplayMusic> response = [.. musics.Select(music => new DisplayMusic
                 {
                     Id = music.MusicId,
                     Title = music.Title,
@@ -55,7 +49,7 @@ namespace MusiCan.Server.Controllers
                         isComposer = userMusic.User.Composer != null
                     })
                     .FirstOrDefault()
-                }).ToList();
+                })];
 
                 return Ok(response);
             }
@@ -110,14 +104,14 @@ namespace MusiCan.Server.Controllers
 
                 List<Music> musics = await _musicService.GetMusicByUserIdAsync(user_id);
 
-                MusicOwner owner = new MusicOwner
+                MusicOwner owner = new()
                 {
                     Id = user.Composer != null ? user.Composer.Id : user.UserId,
                     Name = user.Composer != null ? user.Composer.ArtistName : user.Name,
                     isComposer = user.Composer != null
                 };
 
-                List<DisplayMusic> response = musics.Select(music => new DisplayMusic
+                List<DisplayMusic> response = [.. musics.Select(music => new DisplayMusic
                 {
                     Id = music.MusicId,
                     Title = music.Title,
@@ -128,7 +122,7 @@ namespace MusiCan.Server.Controllers
                     Genre = music.Genre,
                     Timestamp = music.Timestamp,
                     Owner = owner
-                }).ToList();
+                })];
 
                 return Ok(response);
             }
@@ -139,7 +133,7 @@ namespace MusiCan.Server.Controllers
             }
         }
 
-        [HttpGet("usic")]
+        [HttpGet("music")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> GetMusic()
         {
@@ -181,7 +175,7 @@ namespace MusiCan.Server.Controllers
                 }
                 #endregion
 
-                List<DisplayMusic> response = user.UserMusics.Select(userMusic => new DisplayMusic
+                List<DisplayMusic> response = [.. user.UserMusics.Select(userMusic => new DisplayMusic
                 {
                     Id = userMusic.Music.MusicId,
                     Title = userMusic.Music.Title,
@@ -200,7 +194,7 @@ namespace MusiCan.Server.Controllers
                         isComposer = userMusic.User.Composer != null
                     })
                     .FirstOrDefault()
-                }).ToList();
+                })];
 
                 return Ok(response);
             }
@@ -213,7 +207,7 @@ namespace MusiCan.Server.Controllers
 
         [HttpPost("music")]
         [Authorize(Policy = "NotBanned")]
-        public async Task<IActionResult> PostMusic([FromBody] MusicRequest request)
+        public async Task<IActionResult> PostMusic([FromForm] MusicRequest request) // FromForm !!!
         {
             try
             {
@@ -253,7 +247,18 @@ namespace MusiCan.Server.Controllers
                 }
                 #endregion
 
-                Music music = new Music(request, user);
+                using (var memoryStream = new MemoryStream())
+                {
+                    await request.file.CopyToAsync(memoryStream);
+                    request.file_b = memoryStream.ToArray();
+                }
+
+                if (request.file_b == null)
+                {
+                    return Conflict("Could not create music.");
+                }
+
+                Music music = new(request, user);
 
                 if (!await _musicService.CreateMusicAsync(music))
                 {
@@ -331,11 +336,11 @@ namespace MusiCan.Server.Controllers
                 Log.Error($"Error when updating Music: {ex}");
                 return StatusCode(500, "Something unexpected happend");
             }
-        } 
+        }
 
-        [HttpDelete("music")]
+        [HttpDelete("music/{id}")]
         [Authorize(Policy = "NotBanned")]
-        public async Task<IActionResult> DeleteMusic([FromBody] MusicIdRequest request)
+        public async Task<IActionResult> DeleteMusic(Guid id)
         {
             try
             {
@@ -375,12 +380,12 @@ namespace MusiCan.Server.Controllers
                 }
                 #endregion
 
-                if (request.id == Guid.Empty)
+                if (id == Guid.Empty)
                 {
                     return Conflict("Missing music id.");
                 }
 
-                if (!await _musicService.DeleteMusicByIdAsync(request.id))
+                if (!await _musicService.DeleteMusicByIdAsync(id))
                 {
                     return Conflict("Could not delete music.");
                 }

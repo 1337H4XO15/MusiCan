@@ -12,16 +12,10 @@ namespace MusiCan.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController(IAuthService authService, IOptions<Jwt> jtw) : ControllerBase
     {
-        private readonly IAuthService _authService;
-        private readonly IOptions<Jwt> _jwt;
-
-        public AuthController(IAuthService authService, IOptions<Jwt> jtw)
-        {
-            _authService = authService;
-            _jwt = jtw;
-        }
+        private readonly IAuthService _authService = authService;
+        private readonly IOptions<Jwt> _jwt = jtw;
 
         /// <summary>
         /// Http Get Anfrage um einen Nutzer zu registrieren 
@@ -50,7 +44,7 @@ namespace MusiCan.Server.Controllers
 
                 //string hashedPW = SecretHasher.GenerateSaltedPassword(reg.password, reg.Salt);
                 //password is already Hashed by the client on Registration
-                User? user = await _authService.CreateUserAsync(reg.name, reg.password, reg.email, reg.iscomposer ? Roles.Kuenstler : Roles.Nutzer);
+                User? user = await _authService.CreateUserAsync(reg.name, reg.password, reg.email, reg.isComposer ? Roles.Kuenstler : Roles.Nutzer);
                 if (user == null)
                 {
                     Log.Warning($"Error during Registration of user {reg.name}: user not created.");
@@ -60,7 +54,7 @@ namespace MusiCan.Server.Controllers
 
                 (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value, 60); // 1 Stunde
 
-                AuthResponse response = new AuthResponse
+                AuthResponse response = new()
                 {
                     AuthToken = accessToken,
                     Name = user.Name,
@@ -88,10 +82,10 @@ namespace MusiCan.Server.Controllers
         {
             try
             {
-                User? user = await _authService.AuthenticateAsync(login.nameormail, login.password);
+                User? user = await _authService.AuthenticateAsync(login.nameOrMail, login.password);
                 if (user == null)
                 {
-                    Log.Warning($"Error during Login of user {login.nameormail}: authentication failed.");
+                    Log.Warning($"Error during Login of user {login.nameOrMail}: authentication failed.");
                     LoginErrorResponse error = new();
                     return StatusCode(error.StatusCode, error.Message);
                 }
@@ -106,7 +100,7 @@ namespace MusiCan.Server.Controllers
                 // 1 Woche oder 1 Stunde
                 (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value, login.remember ? 10080 : 60);
 
-                AuthResponse response = new AuthResponse
+                AuthResponse response = new()
                 {
                     AuthToken = accessToken,
                     Name = user.Name,

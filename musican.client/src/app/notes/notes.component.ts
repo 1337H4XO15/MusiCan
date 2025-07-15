@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MusicService } from '../services/music.service';
 
 @Component({
   selector: 'app-notes',
@@ -6,18 +8,33 @@ import { Component, Input } from '@angular/core';
   templateUrl: './notes.component.html',
   styleUrl: './notes.component.css',
 })
-export class NotesComponent {
+export class NotesComponent implements OnInit {
   @Input() random: boolean = false; // Standardwert
   @Input() own: boolean = false; //nur eigene Musikstücke anzeigen
+  error: boolean = false;
+
+  constructor(
+    private musicService: MusicService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    let observable;
     if (this.random) {
-      //Musik laden
+      observable = this.musicService.getRandomMusic();
     } else if (this.own) {
-      //Musik laden
+      observable = this.musicService.getOwnMusic();
     } else {
-      //Musik laden
+      observable = this.musicService.getMusic();
     }
+    observable.subscribe({
+      next: (response) => {
+        //this.router.navigate(['/home']); // TODO: routing
+      },
+      error: (error) => {
+        this.error = true
+      }
+    });
   }
 
   get showPublicPieces(): boolean {

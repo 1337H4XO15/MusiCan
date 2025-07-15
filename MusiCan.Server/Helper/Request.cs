@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace MusiCan.Server.Helper
 {
@@ -10,12 +11,12 @@ namespace MusiCan.Server.Helper
 
         public required string email { get; set; }
 
-        public required bool iscomposer { get; set; }
+        public required bool isComposer { get; set; }
     }
 
     public class LoginRequest
     {
-        public required string nameormail { get; set; }
+        public required string nameOrMail { get; set; }
 
         public required string password { get; set; }
 
@@ -31,13 +32,13 @@ namespace MusiCan.Server.Helper
 
         public required string email { get; set; }
 
-        public required bool iscomposer { get; set; }
+        public required bool isComposer { get; set; }
 
-        public byte[]? profileimage { get; set; }
+        public byte[]? profileImage { get; set; }
 
-        public string? profileimagecontenttype { get; set; }
+        public string? profileImageContentType { get; set; }
 
-        public DateTime? birthyear { get; set; }
+        public DateTime? birthYear { get; set; }
 
         public string? genre { get; set; }
 
@@ -52,24 +53,17 @@ namespace MusiCan.Server.Helper
         public Guid? id { get; set; }
         public required string title { get; set; }
 
-        public required string composer { get; set; }
+        public required string author { get; set; }
         
-        public DateTime? releaseyear { get; set; }
+        public string? releaseYear { get; set; }
 
         public string? genre { get; set; }
 
         public required string mimetype { get; set; }
 
-        public required byte[] file { get; set; }
-    }
+        [FromForm]
+        public required IFormFile file { get; set; }
 
-    public class MusicIdRequest
-    {
-        public required Guid id { get; set; }
-    }
-
-    public class ComposerIdRequest
-    {
-        public required Guid id { get; set; }
+        public byte[]? file_b { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './show-notes.component.html',
   styleUrl: './show-notes.component.css',
 })
-export class ShowNotesComponent implements OnInit {
+export class ShowNotesComponent implements OnInit, OnChanges {
   musicPiece: any;
   pdfSrc = 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf'; //im Test hat es mit einer localen Datei nicht funktioniert, muss dann an Datenbank angepasst werden
 
@@ -34,7 +34,28 @@ export class ShowNotesComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.musicPiece = this.musicPieces[+id!];
+    //const id = this.route.snapshot.paramMap.get('id');
+    //this.musicPiece = this.musicPieces[+id!];
+    this.initializeForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['profile'] && changes['profile'].currentValue) {
+      this.initializeForm();
+    }
+  }
+
+  private initializeForm(): void {
+    //if (this.profile && JSON.stringify(this.profile) !== '{}') {
+    //  this.profileForm = this.fb.group({
+    //    username: [this.profile.name, Validators.required],
+    //    email: [this.profile.mail, [Validators.required, Validators.email]],
+    //    password: ['', [Validators.required, Validators.minLength(6)]],
+    //    role: [this.profile.role, Validators.required],
+    //  });
+    //  this.error = false;
+    //} else {
+    //  this.error = true;
+    //}
   }
 }

@@ -16,14 +16,9 @@ namespace MusiCan.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ProfileController : ControllerBase
+    public class ProfileController(IProfileService profileService) : ControllerBase
     {
-        private readonly IProfileService _profileService;
-
-        public ProfileController(IProfileService profileService)
-        {
-            _profileService = profileService;
-        }
+        private readonly IProfileService _profileService = profileService;
 
         [HttpGet("profile")]
         [Authorize(Policy = "NotBanned")]
@@ -68,7 +63,7 @@ namespace MusiCan.Server.Controllers
                 #endregion
 
                 // normaler Nutzer
-                ProfileResponse response = new ProfileResponse
+                ProfileResponse response = new()
                 {
                     Name = user.Name,
                     Mail = user.EMail,
@@ -137,7 +132,7 @@ namespace MusiCan.Server.Controllers
                 #endregion
 
                 // normaler Nutzer
-                ProfileResponse response = new ProfileResponse
+                ProfileResponse response = new()
                 {
                     Name = user.Name,
                     Mail = user.EMail,
@@ -172,7 +167,7 @@ namespace MusiCan.Server.Controllers
             {
                 List<Composer> composers = await _profileService.GetAllComposerAsync();
                 
-                List<DisplayComposer> response = composers.Select(composer => new DisplayComposer
+                List<DisplayComposer> response = [.. composers.Select(composer => new DisplayComposer
                 {
                     Id = composer.Id,
                     ArtistName = composer.ArtistName,
@@ -180,7 +175,7 @@ namespace MusiCan.Server.Controllers
                     BirthYear = composer.BirthYear,
                     Country = composer.Country,
                     Description = composer.Description
-                }).ToList();
+                })];
 
                 return Ok(response);
             }
@@ -191,20 +186,20 @@ namespace MusiCan.Server.Controllers
             }
         }
 
-        [HttpGet("composer")]
+        [HttpGet("composer/{id}")]
         [Authorize(Policy = "NotBanned")]
-        public async Task<IActionResult> GetComposer([FromBody] ComposerIdRequest request)
+        public async Task<IActionResult> GetComposer(Guid id)
         {
             try
             {
-                Composer? composer = await _profileService.GetComposerByIdAsync(request.id);
+                Composer? composer = await _profileService.GetComposerByIdAsync(id);
 
                 if (composer == null)
                 {
                     return NotFound("Composer not found.");
                 }
 
-                DisplayComposer response = new DisplayComposer
+                DisplayComposer response = new()
                 {
                     Id = composer.Id,
                     ArtistName = composer.ArtistName,

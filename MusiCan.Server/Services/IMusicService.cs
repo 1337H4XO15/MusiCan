@@ -51,14 +51,9 @@ namespace MusiCan.Server.Services
         Task<List<Music>> GetMusicByUserIdAsync(Guid userId);
     }
 
-    public class MusicService : IMusicService
+    public class MusicService(DataContext dataContext) : IMusicService
     {
-        private readonly DataContext _dataContext;
-
-        public MusicService(DataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
+        private readonly DataContext _dataContext = dataContext;
 
         public async Task<bool> CreateMusicAsync(Music music)
         {
@@ -102,18 +97,26 @@ namespace MusiCan.Server.Services
                 }
 
 
-                if (string.IsNullOrEmpty(request.title) || string.IsNullOrEmpty(request.composer)
+                if (string.IsNullOrEmpty(request.title) || string.IsNullOrEmpty(request.author)
                     || string.IsNullOrEmpty(request.mimetype) || request.file.Length == 0)
                 {
                     return (null, "Missing Music Attributes.");
                 }
 
                 music.Title = request.title;
-                music.Composer = request.composer; // owner?
-                music.Publication = request.releaseyear;
+                music.Composer = request.author; // owner?
+                if (int.TryParse(request.releaseYear, out int year))
+                {
+                    music.Publication = new DateTime(year, 1, 1);
+                }
                 music.Genre = request.genre;
                 music.ContentType = request.mimetype;
-                music.FileData = request.file;
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    await request.file.CopyToAsync(memoryStream);
+                    music.FileData = memoryStream.ToArray();
+                }
                 music.Timestamp = DateTime.Now;
 
                 await _dataContext.SaveChangesAsync();
@@ -164,13 +167,15 @@ namespace MusiCan.Server.Services
 
         public async Task<List<Music>> GetRandomMusicAsync()
         {
-            Random rng = new Random();
-            return await _dataContext.Musics
+            Random rng = new();
+            return _dataContext.Musics
                 .Include(m => m.UserMusics)
                     .ThenInclude(um => um.User)
                         .ThenInclude(u => u.Composer)
                 .Where(m => m.Public)
-                .OrderBy(_ => rng.Next()).Take(10).ToListAsync();
+                .AsEnumerable()
+                .OrderBy(m => Guid.NewGuid())
+                .Take(10).ToList();
         }
 
         public async Task<List<Music>> GetMusicByUserIdAsync(Guid userId)
