@@ -1,1 +1,9 @@
-<p>error-page works!</p>
+<div class="error-message ms-3 me-3" role="alert" aria-live="assertive">
+  <i class="bi bi-exclamation-circle error-icon"></i>
+  <span class="visually-hidden">Error: </span>
+  @if (error) {
+    <span class="error-text">{{ error }}</span>
+  } @else {
+    <span class="error-text">Error</span>
+  }
+</div>

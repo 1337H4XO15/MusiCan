@@ -15,6 +15,18 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
+
+      <form *ngIf="router.url === '/noten'" (ngSubmit)="onSearch()" class="d-flex">
+        <input [(ngModel)]="searchTerm"
+               (ngModelChange)="onSearchIfCleared($event)"
+               name="search"
+               class="form-control me-2 ms-5"
+               type="search"
+               placeholder="Musikstück suchen"
+               aria-label="Search" />
+        <button class="btn btn-outline-light me-5" type="submit">Suchen</button>
+      </form>
+
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item">
           <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>

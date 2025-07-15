@@ -5,11 +5,7 @@
 <div>
   <!-- Error Display -->
   @if (error) {
-  <div class="error-message ms-3 me-3" role="alert" aria-live="assertive">
-    <i class="bi bi-exclamation-circle error-icon"></i>
-    <span class="visually-hidden">Error: </span>
-    <span class="error-text">{{ error }}</span>
-  </div>
+    <app-error-page [error]="error" />
   }
 
   @if(isLoginMode) {
