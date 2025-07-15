@@ -34,11 +34,14 @@ namespace MusiCan.Server.Helper
 
         public required bool isComposer { get; set; }
 
-        public byte[]? profileImage { get; set; }
+        public string? mimetype { get; set; }
 
-        public string? profileImageContentType { get; set; }
+        [FromForm]
+        public IFormFile? profileImage { get; set; }
 
-        public DateTime? birthYear { get; set; }
+        public byte[]? profileImage_b { get; set; }
+
+        public string? birthYear { get; set; }
 
         public string? genre { get; set; }
 

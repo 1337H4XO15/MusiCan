@@ -78,7 +78,7 @@ namespace MusiCan.Server.Helper
         public string Name { get; set; }
         public string Mail { get; set; }
         public Roles Role { get; set; }
-        public byte[]? ProfileImage { get; set; }
+        public string? ProfileImage { get; set; }
         public string? ProfileImageContentType { get; set; }
         public DateTime? BirthYear { get; set; }
         public string? Genre { get; set; }
@@ -99,6 +99,9 @@ namespace MusiCan.Server.Helper
         public string Country { get; set; }
 
         public string Description { get; set; }
+        public string? ProfileImage { get; set; }
+
+        public string? ProfileImageContentType { get; set; }
     }
 
     public class MusicOwner
@@ -120,7 +123,7 @@ namespace MusiCan.Server.Helper
 
         public string ContentType { get; set; }
 
-        public byte[] FileData { get; set; }
+        public string FileData { get; set; }
 
         public DateTime? Publication { get; set; }
 

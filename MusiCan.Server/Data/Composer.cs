@@ -23,7 +23,11 @@ namespace MusiCan.Server.Data
         [MaxLength(32)]
         public string Country { get; set; }
 
-        public string Description { get; set; }
+        public byte[]? ProfileImage { get; set; }
+
+        public string? ProfileImageContentType { get; set; }
+
+        public string? Description { get; set; }
 
         public User User { get; set; }
 

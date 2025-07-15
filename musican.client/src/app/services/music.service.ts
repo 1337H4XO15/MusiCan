@@ -45,6 +45,13 @@ export class MusicService {
   //  private authService: AuthService
   ) { }
 
+  getPdfSrc(base64Data: string): string {
+    if (base64Data) {
+      return `data:application/pdf;base64,${base64Data}`;
+    }
+    return '';
+  }
+
   getRandomMusic(): Observable<MusicListResponse> {
     return this.http.get<MusicListResponse>(`${this.apiUrl}/randomMusic`)
       .pipe(

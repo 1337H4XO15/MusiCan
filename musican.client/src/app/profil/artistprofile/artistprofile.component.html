@@ -4,7 +4,7 @@
 
     <form [formGroup]="artistForm" (ngSubmit)="saveArtist()">
       <div class="text-center mb-3">
-        <img [src]="artistForm.value.profileImage" alt="Profilbild" class="rounded-circle border" width="120" height="120">
+        <img [src]="getProfileImageSrc()" alt="Profilbild" class="rounded-circle border" width="120" height="120" (error)="onImageError($event)">
       </div>
 
       <div class="profile-item">
@@ -85,8 +85,8 @@
         <input type="file"
                id="profilePicture"
                class="form-control rounded-pill ps-5"
-               placeholder="profilePicture"
-               formControlName="profilePicture" />
+               (change)="onProfileImageSelected($event)"
+               accept="image/*" />
       </div>
 
       <div class="profile-item">

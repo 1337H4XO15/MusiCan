@@ -67,9 +67,7 @@ namespace MusiCan.Server.Controllers
                 {
                     Name = user.Name,
                     Mail = user.EMail,
-                    Role = user.Role,
-                    //ProfileImage = user.ProfileImage,
-                    //ProfileImageContentType = user.ProfileImageContentType
+                    Role = user.Role
                 };
 
                 // Künstler
@@ -79,6 +77,8 @@ namespace MusiCan.Server.Controllers
                     response.Genre = user.Composer?.Genre;
                     response.Country = user.Composer?.Country;
                     response.Description = user.Composer?.Description;
+                    response.ProfileImage = user.Composer?.ProfileImage != null ? Convert.ToBase64String(user.Composer?.ProfileImage) : "";
+                    response.ProfileImageContentType = user.Composer?.ProfileImageContentType;
                 }
 
                 return Ok(response);
@@ -92,7 +92,7 @@ namespace MusiCan.Server.Controllers
 
         [HttpPost("profile")]
         [Authorize(Policy = "NotBanned")]
-        public async Task<IActionResult> PostProfile([FromBody] ProfileRequest profile)
+        public async Task<IActionResult> PostProfile([FromForm] ProfileRequest profile)
         {
             try
             {
@@ -122,6 +122,20 @@ namespace MusiCan.Server.Controllers
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
+                if (profile.profileImage != null && !string.IsNullOrEmpty(profile.mimetype))
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await profile.profileImage.CopyToAsync(memoryStream);
+                        profile.profileImage_b = memoryStream.ToArray();
+                    }
+
+                    if (profile.profileImage_b == null)
+                    {
+                        return Conflict("Could not create music.");
+                    }
+                }
+
                 (User? user, string updateError) = await _profileService.UpdateUserAsync(user_id, profile);
 
                 if (user == null)
@@ -136,9 +150,7 @@ namespace MusiCan.Server.Controllers
                 {
                     Name = user.Name,
                     Mail = user.EMail,
-                    Role = user.Role,
-                    //ProfileImage = user.ProfileImage,
-                    //ProfileImageContentType = user.ProfileImageContentType
+                    Role = user.Role
                 };
 
                 // Künstler
@@ -148,6 +160,8 @@ namespace MusiCan.Server.Controllers
                     response.Genre = user.Composer?.Genre;
                     response.Country = user.Composer?.Country;
                     response.Description = user.Composer?.Description;
+                    response.ProfileImage = user.Composer?.ProfileImage != null ? Convert.ToBase64String(user.Composer?.ProfileImage) : "";
+                    response.ProfileImageContentType = user.Composer?.ProfileImageContentType;
                 }
 
                 return Ok(response);
@@ -166,7 +180,7 @@ namespace MusiCan.Server.Controllers
             try
             {
                 List<Composer> composers = await _profileService.GetAllComposerAsync();
-                
+
                 List<DisplayComposer> response = [.. composers.Select(composer => new DisplayComposer
                 {
                     Id = composer.Id,
@@ -174,7 +188,9 @@ namespace MusiCan.Server.Controllers
                     Genre = composer.Genre,
                     BirthYear = composer.BirthYear,
                     Country = composer.Country,
-                    Description = composer.Description
+                    Description = composer.Description,
+                    ProfileImage = composer.ProfileImage != null ? Convert.ToBase64String(composer.ProfileImage) : "",
+                    ProfileImageContentType = composer.ProfileImageContentType
                 })];
 
                 return Ok(response);
@@ -206,7 +222,9 @@ namespace MusiCan.Server.Controllers
                     Genre = composer.Genre,
                     BirthYear = composer.BirthYear,
                     Country = composer.Country,
-                    Description = composer.Description
+                    Description = composer.Description,
+                    ProfileImage = composer.ProfileImage != null ? Convert.ToBase64String(composer.ProfileImage) : "",
+                    ProfileImageContentType = composer.ProfileImageContentType
                 };
 
                 return Ok(response);

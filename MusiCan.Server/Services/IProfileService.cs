@@ -1,13 +1,14 @@
-﻿using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using MusiCan.Server.Data;
 using MusiCan.Server.DatabaseContext;
 using MusiCan.Server.Helper;
 using Serilog;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusiCan.Server.Services
 {
@@ -92,6 +93,7 @@ namespace MusiCan.Server.Services
             try
             {
                 var user = await _dataContext.Users
+                    .Include(u => u.Composer)
                     .FirstOrDefaultAsync(u => u.UserId == userId);
 
                 if (user == null)
@@ -102,6 +104,12 @@ namespace MusiCan.Server.Services
                 // Nutzer
                 user.Name = request.name;
                 user.EMail = request.email;
+
+                if (user.Role == Roles.Kuenstler && !request.isComposer)
+                {
+                    user.Composer = null;
+                }
+
                 if (user.Role != Roles.Admin && user.Role != Roles.Banned)
                 {
                     user.Role = request.isComposer ? Roles.Kuenstler : Roles.Nutzer;
@@ -113,19 +121,32 @@ namespace MusiCan.Server.Services
                 {
                     if (user.Composer == null)
                     {
-                        user.Composer = new Composer();
+                        user.Composer = new Composer { UserId = userId };
                     }
 
                     if (string.IsNullOrEmpty(request.genre) || string.IsNullOrEmpty(request.country) 
-                        || string.IsNullOrEmpty(request.description) || !request.birthYear.HasValue)
+                        || string.IsNullOrEmpty(request.birthYear))
                     {
                         return (null, "Missing Composer Attributes.");
                     }
 
+                    user.Composer.ArtistName = request.name;
                     user.Composer.Genre = request.genre;
                     user.Composer.Country = request.country;
                     user.Composer.Description = request.description;
-                    user.Composer.BirthYear = request.birthYear ?? DateTime.MinValue; // Der Fall tritt nicht ein, wird vorher geprüft
+                    if (request.profileImage != null && !string.IsNullOrEmpty(request.mimetype))
+                    {
+                        user.Composer.ProfileImage = request.profileImage_b;
+                        user.Composer.ProfileImageContentType = request.mimetype;
+                    }
+                    if (int.TryParse(request.birthYear, out int year))
+                    {
+                        user.Composer.BirthYear = new DateTime(year, 1, 1);
+                    }
+                    else
+                    {
+                        user.Composer.BirthYear = DateTime.MinValue;
+                    }
                 }
 
                 await _dataContext.SaveChangesAsync();

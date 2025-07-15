@@ -3,7 +3,6 @@ import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { FormGroup } from '@angular/forms';
 
 export enum UserRole {
   Admin = 0,
@@ -16,20 +15,23 @@ export interface ProfileResponse {
   name: string;
   mail: string;
   role: number;
-  birtyear: string;
+  birthYear: string;
   genre: string;
   country: string;
   description: string;
+  profileImage?: string;
+  profileImageContentType?: string
 }
 
 export interface Profile {
   name: string;
   mail: string;
   role: UserRole;
-  birtyear?: Date;
+  birthYear?: Date;
   genre?: string;
   country?: string;
   description?: string;
+  profileImage?: any;
   error?: string;
 }
 
@@ -82,9 +84,9 @@ export class ProfilComponent implements OnInit {
       );
   }
 
-  postProfile(profileGroup: FormGroup): Observable<ProfileResponse> {
+  postProfile(profileData: FormData): Observable<ProfileResponse> {
 
-    return this.http.post<ProfileResponse>(`${this.apiUrl}/profile`, profileGroup.value)
+    return this.http.post<ProfileResponse>(`${this.apiUrl}/profile`, profileData)
       .pipe(
         tap(response => {
           this.handleProfileResponse(response);
@@ -92,20 +94,29 @@ export class ProfilComponent implements OnInit {
     )
   }
 
+  getImageSrc(base64Data: string, contentType: string): string {
+    if (base64Data && contentType) {
+      return `data:${contentType};base64,${base64Data}`;
+    }
+    return "";
+  }
+
   private handleProfileResponse(response: ProfileResponse): void {
-    console.log("Profile response:", response);
     let profile: Profile = {
-      name: response.name,
-      mail: response.mail,
-      role: response.role as UserRole
+        name: response.name,
+        mail: response.mail,
+        role: response.role as UserRole
     };
 
     if (profile.role == UserRole.Artist) {
       this.isArtist = true;
-      profile.birtyear = new Date(response.birtyear);
+      profile.birthYear = new Date(response.birthYear);
       profile.genre = response.genre;
       profile.country = response.country;
       profile.description = response.description;
+      if (response.profileImage && response.profileImageContentType) {
+        profile.profileImage = this.getImageSrc(response.profileImage, response.profileImageContentType);
+      }
     }
 
     this.profile = profile;

@@ -20,10 +20,6 @@ namespace MusiCan.Server.Data
 
         public Roles Role { get; set; }
 
-        //public byte[]? ProfileImage { get; set; }
-
-        //public string? ProfileImageContentType { get; set; }
-
         public DateTime? UpdatedAt { get; set; }
 
         public ICollection<UserMusic> UserMusics { get; set; }
