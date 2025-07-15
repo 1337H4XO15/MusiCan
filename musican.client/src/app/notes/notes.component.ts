@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MusicService } from '../services/music.service';
+import { SearchService } from '../services/search.service';
 
 
 @Component({
@@ -12,12 +13,14 @@ import { MusicService } from '../services/music.service';
 export class NotesComponent implements OnInit {
   @Input() random: boolean = false; // Standardwert
   @Input() own: boolean = false; //nur eigene Musikstücke anzeigen
+  searchTerm: string = '';
   error: boolean = false;
   selectedPiece: any;
 
   constructor(
     private musicService: MusicService,
-    private router: Router
+    private router: Router,
+    private searchService: SearchService
   ) { }
 
   ngOnInit() {
@@ -37,13 +40,36 @@ export class NotesComponent implements OnInit {
         this.error = true
       }
     });
+
+
+    this.searchService.searchTerm$.subscribe(term => {
+      this.searchTerm = term;
+      console.log('Suchbegriff empfangen:', term);
+      if (!this.random && !this.own) {
+        this.filterPieces(this.searchTerm);
+      }
+    });
+  }
+
+  filterPieces(term: string) {
+    const lowerTerm = term.toLowerCase().trim();
+
+
+    if (lowerTerm) {
+      this.musicPieces = this.allPieces.filter(piece =>
+        piece.title.toLowerCase().includes(lowerTerm)
+      );
+    } else {
+      this.musicPieces = this.allPieces;
+    }
+
   }
 
   get showPublicPieces(): boolean {
     return !(this.random || this.own);
   }
 
-  musicPieces = [
+  allPieces = [
     {
       title: 'Symphonie Nr. 5',
       composers: ['Ludwig van Beethoven'],
@@ -70,10 +96,12 @@ export class NotesComponent implements OnInit {
     },
   ];
 
+  musicPieces = [...this.allPieces];
+
+
   setSelectedPiece(id: number) {
     this.selectedPiece = this.musicPieces[id];
   }
-
 
   //müsste nochmal drübergeschaut werden
   deletePiece(): void {
