@@ -4,20 +4,26 @@
 
 
 <div class="container py-5">
-  @if(showPublicPieces) {
+  @if (showPublicPieces) {
   <h2 class="text-center text-white mb-5">Öffentliche Musikstücke</h2>
   }
 
   <div class="row g-4">
-    <div
-      class="col-md-6 col-lg-4"
-      *ngFor="let piece of musicPieces; let i = index"
-    >
+    <div class="col-md-6 col-lg-4"
+         *ngFor="let piece of musicPieces; let i = index">
+
       <a [routerLink]="['/noten', i]" class="text-decoration-none">
-        <div
-          class="card h-100 border-0 shadow-sm bg-white hover-shadow transition"
-        >
+        <div class="card h-100 border-0 shadow-sm bg-white hover-shadow transition">
           <div class="card-body">
+            @if (own) {
+              <button class="btn btn-sm position-absolute top-0 end-0 m-2 delete-button"
+                      (click)="setSelectedPiece(i); $event.preventDefault(); $event.stopPropagation();"
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal">
+                <i class="bi bi-trash"></i>
+              </button>
+            }
             <h5 class="card-title text-primary">{{ piece.title }}</h5>
             <p class="card-text mb-1">
               <strong>Komponist(en):</strong> {{ piece.composers.join(", ") }}
@@ -29,6 +35,25 @@
           </div>
         </div>
       </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">{{ selectedPiece?.title }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Möchtest du dieses Musikstück wirklich löschen?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deletePiece()">Löschen</button>
+      </div>
     </div>
   </div>
 </div>
