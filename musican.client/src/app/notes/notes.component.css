@@ -38,3 +38,11 @@ h2 {
     font-size: 0.95rem;
   }
 }
+
+.delete-button {
+  color: white;
+  background-color: #f5425a;
+  &:hover {
+      background-color: rgb(255, 50, 50, 0.8);
+    }
+}

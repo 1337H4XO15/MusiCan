@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MusicService } from '../services/music.service';
 
+
 @Component({
   selector: 'app-notes',
   standalone: false,
@@ -12,6 +13,7 @@ export class NotesComponent implements OnInit {
   @Input() random: boolean = false; // Standardwert
   @Input() own: boolean = false; //nur eigene Musikstücke anzeigen
   error: boolean = false;
+  selectedPiece: any;
 
   constructor(
     private musicService: MusicService,
@@ -67,4 +69,28 @@ export class NotesComponent implements OnInit {
       year: 1928,
     },
   ];
+
+  setSelectedPiece(id: number) {
+    this.selectedPiece = this.musicPieces[id];
+  }
+
+
+  //müsste nochmal drübergeschaut werden
+  deletePiece(): void {
+    console.log('Lösche Stück mit ID:', this.selectedPiece);
+    this.musicService.deleteMusic(this.selectedPiece.id);
+
+    this.musicService.deleteMusic(this.selectedPiece.id).subscribe({
+      next: (success) => {
+        if (success) {
+          console.log('Musikstück erfolgreich gelöscht');
+        } else {
+          console.warn('Löschen fehlgeschlagen');
+        }
+      },
+      error: (err) => {
+        console.error('Fehler beim Löschen:', err);
+      }
+    });
+  }
 }
