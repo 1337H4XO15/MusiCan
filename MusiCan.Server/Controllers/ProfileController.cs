@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Options;
 using MusiCan.Server.Data;
-using MusiCan.Server.DatabaseContext;
 using MusiCan.Server.Helper;
 using MusiCan.Server.Services;
 using Serilog;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
 using System.Security.Claims;
 
 namespace MusiCan.Server.Controllers
@@ -20,6 +14,10 @@ namespace MusiCan.Server.Controllers
     {
         private readonly IProfileService _profileService = profileService;
 
+        /// <summary>
+        /// Http Get Anfrage um eigenes Nutzer- / Künstlerprofil abzufragen
+        /// </summary>
+        /// <returns>Nutzer- oder Künstlerprofil</returns>
         [HttpGet("profile")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> GetProfile()
@@ -90,9 +88,14 @@ namespace MusiCan.Server.Controllers
             }
         }
 
-        [HttpPost("profile")]
+        /// <summary>
+        /// Http Put Anfrage um eigenes Nutzer- / Künstlerprofil zu ändern
+        /// </summary>
+        /// <param name="profile">Nutzer- / Künstlerprofil</param>
+        /// <returns>Nutzer- oder Künstlerprofil</returns>
+        [HttpPut("profile")]
         [Authorize(Policy = "NotBanned")]
-        public async Task<IActionResult> PostProfile([FromForm] ProfileRequest profile)
+        public async Task<IActionResult> PutProfile([FromForm] ProfileRequest profile)
         {
             try
             {
@@ -173,6 +176,10 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Get Anfrage um alle Künstlerprofile abzufragen
+        /// </summary>
+        /// <returns>Liste der Künstlerprofile</returns>
         [HttpGet("composers")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> GetComposers()
@@ -202,6 +209,11 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Get Anfrage um ein Künstlerprofil abzufragen
+        /// </summary>
+        /// <param name="id">Künstler ID</param>
+        /// <returns>Künstlerprofil</returns>
         [HttpGet("composer/{id}")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> GetComposer(Guid id)

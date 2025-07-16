@@ -16,9 +16,9 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  AuthToken: string;
-  Name: string;
-  ExpireTime: string;
+  authToken: string;
+  name: string;
+  expireTime: string;
 }
 
 export interface User {
@@ -52,12 +52,12 @@ export class AuthService {
       .pipe(
         tap(response => {
           const user: User = {
-            name: response.Name,
-            token: response.AuthToken
+            name: response.name,
+            token: response.authToken
           };
 
           localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('tokenExpiry', response.ExpireTime);
+          localStorage.setItem('tokenExpiry', response.expireTime);
           this.currentUserSubject.next(user);
         })
       );
@@ -68,12 +68,12 @@ export class AuthService {
       .pipe(
         tap(response => {
           const user: User = {
-            name: response.Name,
-            token: response.AuthToken
+            name: response.name,
+            token: response.authToken
           };
 
           localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('tokenExpiry', response.ExpireTime);
+          localStorage.setItem('tokenExpiry', response.expireTime);
           this.currentUserSubject.next(user);
         })
       );
@@ -83,7 +83,7 @@ export class AuthService {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('tokenExpiry');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   getCurrentUser(): User | null {

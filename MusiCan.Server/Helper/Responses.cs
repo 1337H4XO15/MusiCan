@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace MusiCan.Server.Helper
+﻿namespace MusiCan.Server.Helper
 {
     public class ErrorResponse
     {
@@ -61,16 +57,11 @@ namespace MusiCan.Server.Helper
 
     public class AuthResponse
     {
-        public string AuthToken { get; set; }
+        public string authToken { get; set; }
 
-        public string Name { get; set; }
+        public string name { get; set; }
         
-        public DateTime ExpireTime { get; set; }
-
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this);
-        }
+        public DateTime expireTime { get; set; }
     }
 
     public class ProfileResponse
@@ -98,7 +89,7 @@ namespace MusiCan.Server.Helper
 
         public string Country { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public string? ProfileImage { get; set; }
 
         public string? ProfileImageContentType { get; set; }

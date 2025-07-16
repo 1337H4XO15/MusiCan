@@ -39,7 +39,7 @@ namespace MusiCan.Server.Data
             Title = request.title;
             Composer = request.author;
             ContentType = request.mimetype;
-            FileData = request.file_b;
+            FileData = request.file_b; // wird voher geprüft
             if (int.TryParse(request.releaseYear, out int year))
             {
                 Publication = new DateTime(year, 1, 1);

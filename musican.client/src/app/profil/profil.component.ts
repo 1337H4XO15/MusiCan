@@ -46,7 +46,7 @@ export class ProfilComponent implements OnInit {
   profile!: Profile; // Non-null assertion
   isArtist: boolean = false;
   edit: boolean = false;
-  postProfileFn = this.postProfile.bind(this); // Forwarding von http
+  postProfileFn = this.updateProfile.bind(this); // Forwarding von http
 
   constructor(private http: HttpClient,
     private router: Router,
@@ -84,9 +84,9 @@ export class ProfilComponent implements OnInit {
       );
   }
 
-  postProfile(profileData: FormData): Observable<ProfileResponse> {
+  updateProfile(profileData: FormData): Observable<ProfileResponse> {
 
-    return this.http.post<ProfileResponse>(`${this.apiUrl}/profile`, profileData)
+    return this.http.put<ProfileResponse>(`${this.apiUrl}/profile`, profileData)
       .pipe(
         tap(response => {
           this.handleProfileResponse(response);

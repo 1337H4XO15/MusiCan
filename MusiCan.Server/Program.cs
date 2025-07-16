@@ -7,7 +7,7 @@ using MusiCan.Server.Services;
 using Serilog;
 using System.Text;
 
-const string version = "0.0.3";
+const string version = "0.0.4";
 
 Serilog.Log.Logger = new LoggerConfiguration()
 //.MinimumLevel.Information()

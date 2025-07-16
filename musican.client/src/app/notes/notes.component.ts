@@ -57,7 +57,6 @@ export class NotesComponent implements OnInit {
   filterPieces(term: string) {
     const lowerTerm = term.toLowerCase().trim();
 
-
     if (lowerTerm) {
       this.musicPieces = this.allPieces.filter(piece =>
         piece.title.toLowerCase().includes(lowerTerm)
@@ -65,7 +64,6 @@ export class NotesComponent implements OnInit {
     } else {
       this.musicPieces = this.allPieces;
     }
-
   }
 
   get showPublicPieces(): boolean {
@@ -76,21 +74,14 @@ export class NotesComponent implements OnInit {
     this.selectedPiece = this.musicPieces[id];
   }
 
-  //müsste nochmal drübergeschaut werden
   deletePiece(): void {
-    console.log('Lösche Stück mit ID:', this.selectedPiece);
-    this.musicService.deleteMusic(this.selectedPiece.id);
-
     this.musicService.deleteMusic(this.selectedPiece.id).subscribe({
-      next: (success) => {
-        if (success) {
-          console.log('Musikstück erfolgreich gelöscht');
-        } else {
-          console.warn('Löschen fehlgeschlagen');
-        }
+      next: (response) => {
+        this.allPieces = response;
+        this.musicPieces = [...this.allPieces]; // TODO: display Success
       },
       error: (err) => {
-        console.error('Fehler beim Löschen:', err);
+        console.error('Fehler beim Löschen:', err);// TODO: display Error
       }
     });
   }

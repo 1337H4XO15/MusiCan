@@ -1,15 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
 using MusiCan.Server.Data;
 using MusiCan.Server.DatabaseContext;
 using MusiCan.Server.Helper;
 using Serilog;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MusiCan.Server.Services
 {
@@ -42,6 +36,12 @@ namespace MusiCan.Server.Services
         /// </summary>
         /// <returns>Liste mit den Musik Einträgen</returns>
         Task<List<Music>> GetRandomMusicAsync();
+
+        /// <summary>
+        /// Holt öffentliche Musik Einträge
+        /// </summary>
+        /// <returns>Liste mit den Musik Einträgen</returns>
+        Task<List<Music>> GetPublicMusicAsync();
 
         /// <summary>
         /// Holt alle Musik Einträge des Nutzers 
@@ -175,15 +175,26 @@ namespace MusiCan.Server.Services
 
         public async Task<List<Music>> GetRandomMusicAsync()
         {
-            Random rng = new();
-            return _dataContext.Musics
+            var music = await _dataContext.Musics
                 .Include(m => m.UserMusics)
                     .ThenInclude(um => um.User)
                         .ThenInclude(u => u.Composer)
                 .Where(m => m.Public)
-                .AsEnumerable()
+                .ToListAsync();
+
+            return music
                 .OrderBy(m => Guid.NewGuid())
                 .Take(10).ToList();
+        }
+
+        public async Task<List<Music>> GetPublicMusicAsync()
+        {
+            return await _dataContext.Musics
+                .Include(m => m.UserMusics)
+                    .ThenInclude(um => um.User)
+                        .ThenInclude(u => u.Composer)
+                .Where(m => m.Public)
+                .ToListAsync();
         }
 
         public async Task<List<Music>> GetMusicByUserIdAsync(Guid userId)
@@ -208,7 +219,6 @@ namespace MusiCan.Server.Services
                     )
                 );
         }
-
     }
 
 }

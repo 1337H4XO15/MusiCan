@@ -1,14 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
 using MusiCan.Server.Data;
 using MusiCan.Server.DatabaseContext;
 using MusiCan.Server.Helper;
 using Serilog;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusiCan.Server.Services
 {
@@ -20,13 +14,6 @@ namespace MusiCan.Server.Services
         /// <param name="id">Nutzer ID</param>
         /// <returns>Nutzer</returns>
         Task<User?> GetUserByIdAsync(Guid id);
-
-        /// <summary>
-        /// gibt den Nutzer mit passender Nutzer ID zurück, läd auch den Komponisten und Musik, wenn vorhanden
-        /// </summary>
-        /// <param name="id">Nutzer ID</param>
-        /// <returns>Nutzer</returns>
-        Task<User?> GetUserWithMusicByIdAsync(Guid id);
 
         /// <summary>
         /// Bearbeitet einen Nutzer und gibt diesen dann zurück
@@ -60,23 +47,6 @@ namespace MusiCan.Server.Services
             {
                 return await _dataContext.Users
                     .Include(u => u.Composer)
-                    .FirstOrDefaultAsync(u => u.UserId == id);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error while retrieving user {ex}");
-                return null; // DB error
-            }
-        }
-
-        public async Task<User?> GetUserWithMusicByIdAsync(Guid id)
-        {
-            try
-            {
-                return await _dataContext.Users
-                    .Include(u => u.Composer)
-                    .Include(u => u.UserMusics)
-                        .ThenInclude(u => u.Music)
                     .FirstOrDefaultAsync(u => u.UserId == id);
             }
             catch (Exception ex)

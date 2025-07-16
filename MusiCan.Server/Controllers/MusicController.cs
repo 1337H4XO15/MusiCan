@@ -1,17 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using MusiCan.Server.Data;
-using MusiCan.Server.DatabaseContext;
 using MusiCan.Server.Helper;
 using MusiCan.Server.Services;
 using Serilog;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
 using System.Security.Claims;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusiCan.Server.Controllers
 {
@@ -22,6 +16,10 @@ namespace MusiCan.Server.Controllers
         private readonly IMusicService _musicService = musicService;
         private readonly IProfileService _profileService = profileService;
 
+        /// <summary>
+        /// Http Get Anfrage um 10 zufällige Musikstücke abzufragen, die öffentlich zugänglich sind
+        /// </summary>
+        /// <returns>Liste der zufälligen Musikstücke</returns>
         [HttpGet("randomMusic")]
         [AllowAnonymous]
         public async Task<IActionResult> GetRandomMusic()
@@ -60,6 +58,10 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Get Anfrage um eigene Musikstücke abzufragen
+        /// </summary>
+        /// <returns>Liste der eigenen Musikstücke</returns>
         [HttpGet("ownMusic")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> GetOwnMusic()
@@ -133,6 +135,10 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Get Anfrage um öffentliche Musikstücke abzufragen
+        /// </summary>
+        /// <returns>Liste der öffentlichen Musikstücke</returns>
         [HttpGet("music")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> GetMusic()
@@ -165,7 +171,7 @@ namespace MusiCan.Server.Controllers
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                User? user = await _profileService.GetUserWithMusicByIdAsync(user_id);
+                User? user = await _profileService.GetUserByIdAsync(user_id);
 
                 if (user == null)
                 {
@@ -175,17 +181,20 @@ namespace MusiCan.Server.Controllers
                 }
                 #endregion
 
-                List<DisplayMusic> response = [.. user.UserMusics.Select(userMusic => new DisplayMusic
+                List<Music> publicMusic = await _musicService.GetPublicMusicAsync();
+
+                List<DisplayMusic> response = [.. publicMusic
+                    .Select(music => new DisplayMusic
                 {
-                    Id = userMusic.Music.MusicId,
-                    Title = userMusic.Music.Title,
-                    Composer = userMusic.Music.Composer,
-                    ContentType = userMusic.Music.ContentType,
-                    FileData = Convert.ToBase64String(userMusic.Music.FileData),
-                    Publication = userMusic.Music.Publication,
-                    Genre = userMusic.Music.Genre,
-                    Timestamp = userMusic.Music.Timestamp,
-                    Owner = userMusic.Music.UserMusics
+                    Id = music.MusicId,
+                    Title = music.Title,
+                    Composer = music.Composer,
+                    ContentType = music.ContentType,
+                    FileData = Convert.ToBase64String(music.FileData),
+                    Publication = music.Publication,
+                    Genre = music.Genre,
+                    Timestamp = music.Timestamp,
+                    Owner = music.UserMusics
                     .Where(um => um.Access == Access.Owner)
                     .Select(userMusic => new MusicOwner
                     {
@@ -205,6 +214,11 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Get Anfrage um Musikstück abzufragen
+        /// </summary>
+        /// <param name="id">Musikstück ID</param>
+        /// <returns>Musikstück</returns>
         [HttpGet("music/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetMusic(Guid id)
@@ -261,9 +275,13 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Post Anfrage um Musikstück hochzuladen
+        /// </summary>
+        /// <returns>Statuscode 200</returns>
         [HttpPost("music")]
         [Authorize(Policy = "NotBanned")]
-        public async Task<IActionResult> PostMusic([FromForm] MusicRequest request) // FromForm !!!
+        public async Task<IActionResult> PostMusic([FromForm] MusicRequest request)
         {
             try
             {
@@ -330,6 +348,10 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Put Anfrage um Musikstück zu ändern
+        /// </summary>
+        /// <returns>Statuscode 200</returns>
         [HttpPut("music")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> UpdateMusic([FromBody] MusicRequest request)
@@ -394,6 +416,10 @@ namespace MusiCan.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Http Delete Anfrage um Musikstücke zu löschen
+        /// </summary>
+        /// <returns>Liste der eigenen Musikstücke</returns>
         [HttpDelete("music/{id}")]
         [Authorize(Policy = "NotBanned")]
         public async Task<IActionResult> DeleteMusic(Guid id)
@@ -446,7 +472,29 @@ namespace MusiCan.Server.Controllers
                     return Conflict("Could not delete music.");
                 }
 
-                return Ok();
+                List<Music> musics = await _musicService.GetMusicByUserIdAsync(user_id);
+
+                MusicOwner owner = new()
+                {
+                    Id = user.Composer != null ? user.Composer.Id : user.UserId,
+                    Name = user.Composer != null ? user.Composer.ArtistName : user.Name,
+                    isComposer = user.Composer != null
+                };
+
+                List<DisplayMusic> response = [.. musics.Select(music => new DisplayMusic
+                {
+                    Id = music.MusicId,
+                    Title = music.Title,
+                    Composer = music.Composer,
+                    ContentType = music.ContentType,
+                    FileData = Convert.ToBase64String(music.FileData),
+                    Publication = music.Publication,
+                    Genre = music.Genre,
+                    Timestamp = music.Timestamp,
+                    Owner = owner
+                })];
+
+                return Ok(response);
             }
             catch (Exception ex)
             {

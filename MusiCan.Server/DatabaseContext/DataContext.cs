@@ -18,7 +18,7 @@ namespace MusiCan.Server.DatabaseContext
         /// Linking 
         /// n:n Beziehung zwischen Nutzer und Musik
         /// 1:1 Beziehung zwischen Musik und Composer
-        /// </summarydotnet ef migrations add>
+        /// </summary>
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,7 @@ namespace MusiCan.Server.DatabaseContext
                 .WithMany(m => m.UserMusics)
                 .HasForeignKey(um => um.MusicId);
 
+            // über [ForeignKey("User")] in Composer.cs gesetzt
             //modelBuilder.Entity<Composer>()
             //    .HasOne(c => c.User)
             //    .WithOne(u => u.Composer)

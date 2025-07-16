@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 export interface MusicRequest {
   id?: string;
@@ -63,14 +63,7 @@ export class MusicService {
     return this.http.put<void>(`${this.apiUrl}/music`, request);
   }
 
-  deleteMusic(id: string): Observable<boolean> {
-    return this.http.delete<boolean>(`${this.apiUrl}/music/${id}`)
-      .pipe(
-        tap(success => {
-          if (success) {
-            console.log('Deletion succeeded');
-          }
-        })
-      );
+  deleteMusic(id: string): Observable<MusicListResponse> {
+    return this.http.delete<MusicListResponse>(`${this.apiUrl}/music/${id}`);
   }
 }

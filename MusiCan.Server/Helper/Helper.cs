@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace MusiCan.Server.Helper
 {
@@ -54,56 +53,6 @@ namespace MusiCan.Server.Helper
                 _keySize
             );
             return Convert.ToBase64String(hashedPW);
-        }
-
-        /// <summary>
-        /// überprüft ob ein String ein DeviceHash ist
-        /// </summary>
-        /// <param name="input">String zum testen</param>
-        /// <returns>True wenn input ein DeviceHash ist</returns>
-        public static bool IsHash(string input)
-        {
-            byte[] input_hash = Convert.FromBase64String(input);
-
-            if (input_hash.Length != _keySize)
-            {
-                return false;
-            }
-
-            return true;
-        }
-    }
-
-    //Helper Klasse die Helper Funktionen beinhaltet
-    public static class Helper
-    {
-        public static long ToWindowsSystemTime(this DateTime? utcTime)
-        {
-            if(utcTime == null)
-            {
-                return -1;
-            }
-
-            DateTime startTime = new(1601,1,1,0,0,0,DateTimeKind.Utc);
-
-            TimeSpan difference = utcTime.Value - startTime;
-
-            //windows Zeit in 100ns ticks
-            const long TicksPerSecond = 10000000;
-
-            return (long)difference.TotalSeconds * TicksPerSecond;
-        }
-
-        public static long ToWindowsSystemTime(this DateTime utcTime)
-        {
-            DateTime startTime = new(1601, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-            TimeSpan difference = utcTime - startTime;
-
-            //windows Zeit in 100ns ticks
-            const long TicksPerSecond = 10000000;
-
-            return (long)difference.TotalSeconds * TicksPerSecond;
         }
     }
 }

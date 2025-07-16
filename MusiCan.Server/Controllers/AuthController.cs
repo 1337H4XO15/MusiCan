@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MusiCan.Server.DatabaseContext;
 using MusiCan.Server.Data;
 using MusiCan.Server.Helper;
 using MusiCan.Server.Services;
@@ -18,10 +16,10 @@ namespace MusiCan.Server.Controllers
         private readonly IOptions<Jwt> _jwt = jtw;
 
         /// <summary>
-        /// Http Get Anfrage um einen Nutzer zu registrieren 
+        /// Http Post Anfrage um einen Nutzer zu registrieren 
         /// </summary>
         /// <param name="reg">name, password, email und isComposer</param>
-        /// <returns>JsonWebToken und Product als Response</returns>
+        /// <returns>JsonWebToken, Nutzername, Ablaufdatum</returns>
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Registration([FromBody] RegistrationRequest reg)
@@ -56,12 +54,12 @@ namespace MusiCan.Server.Controllers
 
                 AuthResponse response = new()
                 {
-                    AuthToken = accessToken,
-                    Name = user.Name,
-                    ExpireTime = expire
+                    authToken = accessToken,
+                    name = user.Name,
+                    expireTime = expire
                 };
 
-                return Ok(response.ToString());
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -72,13 +70,13 @@ namespace MusiCan.Server.Controllers
         }
 
         /// <summary>
-        /// Http Get Anfrage um einen Nutzer einzuloggen 
+        /// Http Post Anfrage um einen Nutzer einzuloggen 
         /// </summary>
-        /// <param name="login">name und password</param>
-        /// <returns>JsonWebToken als Response</returns>
+        /// <param name="login">nam, password, remember</param>
+        /// <returns>JsonWebToken, Nutzername, Ablaufdatum</returns>
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Helper.LoginRequest login)
+        public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
             try
             {
@@ -102,12 +100,12 @@ namespace MusiCan.Server.Controllers
 
                 AuthResponse response = new()
                 {
-                    AuthToken = accessToken,
-                    Name = user.Name,
-                    ExpireTime = expire
+                    authToken = accessToken,
+                    name = user.Name,
+                    expireTime = expire
                 };
 
-                return Ok(response.ToString());
+                return Ok(response);
             }
             catch (Exception ex)
             {

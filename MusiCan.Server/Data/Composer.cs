@@ -1,5 +1,4 @@
-﻿using MusiCan.Server.Helper;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusiCan.Server.Data
