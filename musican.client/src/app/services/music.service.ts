@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-
 export interface MusicRequest {
   id?: string;
   title: string;
@@ -40,17 +37,7 @@ export type MusicListResponse = DisplayMusic[];
 export class MusicService {
   private apiUrl = 'https://localhost:7012/Music';
 
-  constructor(private http: HttpClient,
-    private router: Router,
-  //  private authService: AuthService
-  ) { }
-
-  getPdfSrc(base64Data: string): string {
-    if (base64Data) {
-      return `data:application/pdf;base64,${base64Data}`;
-    }
-    return '';
-  }
+  constructor(private http: HttpClient) { }
 
   getRandomMusic(): Observable<MusicListResponse> {
     return this.http.get<MusicListResponse>(`${this.apiUrl}/randomMusic`);
@@ -73,12 +60,7 @@ export class MusicService {
   }
 
   updateMusic(request: MusicRequest): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/music`, request)
-      .pipe(
-        tap(response => {
-          console.log(`tap: ${response}`);
-        })
-      );
+    return this.http.put<void>(`${this.apiUrl}/music`, request);
   }
 
   deleteMusic(id: string): Observable<boolean> {
