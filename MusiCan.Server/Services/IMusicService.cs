@@ -49,6 +49,14 @@ namespace MusiCan.Server.Services
         /// <param name="userId">Nutzer ID</param>
         /// <returns>Liste mit den Musik Einträgen</returns>
         Task<List<Music>> GetMusicByUserIdAsync(Guid userId);
+
+        /// <summary>
+        /// Holt Musik Einträge mit, wenn Nutzer Nutzer gültig
+        /// </summary>
+        /// <param name="musicId">Musik Eintrag ID</param>
+        /// <param name="userId">Nutzer ID</param>
+        /// <returns>Liste mit den Musik Einträgen</returns>
+        Task<Music?> GetMusicByIdAsync(Guid musicId, Guid? userId);
     }
 
     public class MusicService(DataContext dataContext) : IMusicService
@@ -182,8 +190,23 @@ namespace MusiCan.Server.Services
         {
             return await _dataContext.Musics
                 .Include(m => m.UserMusics)
+                    .ThenInclude(um => um.User)
                 .Where(m => m.UserMusics.Any(um => um.Access == Access.Owner && um.UserId == userId))
                 .ToListAsync();
+        }
+
+        public async Task<Music?> GetMusicByIdAsync(Guid musicId, Guid? userId)
+        {
+            return await _dataContext.Musics
+                .Include(m => m.UserMusics)
+                    .ThenInclude(um => um.User)
+                .FirstOrDefaultAsync(m =>
+                    m.MusicId == musicId &&
+                    (
+                        m.Public ||
+                        (userId != null && m.UserMusics.Any(um => um.Access == Access.Owner && um.UserId == userId))
+                    )
+                );
         }
 
     }

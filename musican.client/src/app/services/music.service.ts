@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -53,39 +53,23 @@ export class MusicService {
   }
 
   getRandomMusic(): Observable<MusicListResponse> {
-    return this.http.get<MusicListResponse>(`${this.apiUrl}/randomMusic`)
-      .pipe(
-        tap(response => {
-          console.log(`tap: ${response}`);
-        })
-      );
+    return this.http.get<MusicListResponse>(`${this.apiUrl}/randomMusic`);
   }
 
   getOwnMusic(): Observable<MusicListResponse> {
-    return this.http.get<MusicListResponse>(`${this.apiUrl}/ownMusic`)
-      .pipe(
-        tap(response => {
-          console.log(`tap: ${response}`);
-        })
-      );
+    return this.http.get<MusicListResponse>(`${this.apiUrl}/ownMusic`);
   }
 
-  getMusic(): Observable<MusicListResponse> {
-    return this.http.get<MusicListResponse>(`${this.apiUrl}/music`)
-      .pipe(
-        tap(response => {
-          console.log(`tap: ${response}`);
-        })
-      );
+  getMusics(): Observable<MusicListResponse> {
+    return this.http.get<MusicListResponse>(`${this.apiUrl}/music`);
+  }
+
+  getMusic(id: string): Observable<DisplayMusic> {
+    return this.http.get<DisplayMusic>(`${this.apiUrl}/music/${id}`);
   }
 
   postMusic(request: FormData): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/music`, request)
-      .pipe(
-        tap(response => {
-          console.log(`tap: ${response}`);
-        })
-      );
+    return this.http.post<void>(`${this.apiUrl}/music`, request);
   }
 
   updateMusic(request: MusicRequest): Observable<void> {

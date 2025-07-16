@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MusicService } from '../services/music.service';
+import { MusicListResponse, MusicService } from '../services/music.service';
 import { SearchService } from '../services/search.service';
 
 
@@ -16,6 +16,8 @@ export class NotesComponent implements OnInit {
   searchTerm: string = '';
   error: boolean = false;
   selectedPiece: any;
+  allPieces!: MusicListResponse;
+  musicPieces!: MusicListResponse;
 
   constructor(
     private musicService: MusicService,
@@ -30,14 +32,15 @@ export class NotesComponent implements OnInit {
     } else if (this.own) {
       observable = this.musicService.getOwnMusic();
     } else {
-      observable = this.musicService.getMusic();
+      observable = this.musicService.getMusics();
     }
     observable.subscribe({
       next: (response) => {
-        //this.router.navigate(['/home']); // TODO: routing
+        this.allPieces = response;
+        this.musicPieces = [...this.allPieces];
       },
       error: (error) => {
-        this.error = true
+        this.error = true // TODO: Display Error
       }
     });
 
@@ -68,36 +71,6 @@ export class NotesComponent implements OnInit {
   get showPublicPieces(): boolean {
     return !(this.random || this.own);
   }
-
-  allPieces = [
-    {
-      title: 'Symphonie Nr. 5',
-      composers: ['Ludwig van Beethoven'],
-      genre: 'Klassik',
-      year: 1808,
-    },
-    {
-      title: 'Die Zauberflöte',
-      composers: ['Wolfgang Amadeus Mozart'],
-      genre: 'Oper',
-      year: 1791,
-    },
-    {
-      title: 'Rhapsody in Blue',
-      composers: ['George Gershwin'],
-      genre: 'Jazz',
-      year: 1924,
-    },
-    {
-      title: 'Boléro',
-      composers: ['Maurice Ravel'],
-      genre: 'Orchesterwerk',
-      year: 1928,
-    },
-  ];
-
-  musicPieces = [...this.allPieces];
-
 
   setSelectedPiece(id: number) {
     this.selectedPiece = this.musicPieces[id];

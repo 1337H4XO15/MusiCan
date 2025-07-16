@@ -23,7 +23,7 @@ namespace MusiCan.Server.Controllers
         private readonly IProfileService _profileService = profileService;
 
         [HttpGet("randomMusic")]
-        [Authorize(Policy = "NotBanned")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetRandomMusic()
         {
             try
@@ -195,6 +195,62 @@ namespace MusiCan.Server.Controllers
                     })
                     .FirstOrDefault()
                 })];
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error during Music: {ex}");
+                return StatusCode(500, "Something unexpected happend");
+            }
+        }
+
+        [HttpGet("music/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetMusic(Guid id)
+        {
+            try
+            {
+                Guid? user_id = null;
+
+                if (HttpContext.User.Identity is ClaimsIdentity identity)
+                {
+                    string? user_id_s = identity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                    if (user_id_s != null && Guid.TryParse(user_id_s, out Guid parsedUserId))
+                    {
+                        user_id = parsedUserId;
+                    }
+                }
+
+                Music? music = await _musicService.GetMusicByIdAsync(id, user_id);
+
+                if (music == null)
+                {
+                    return NotFound("Music not found.");
+                }
+
+                DisplayMusic response = new()
+                {
+                    Id = music.MusicId,
+                    Title = music.Title,
+                    Composer = music.Composer,
+                    ContentType = music.ContentType,
+                    FileData = Convert.ToBase64String(music.FileData),
+                    Publication = music.Publication,
+                    Genre = music.Genre,
+                    Timestamp = music.Timestamp,
+                    Owner = music.UserMusics
+                    .Where(um => um.Access == Access.Owner)
+                    .Select(userMusic => new MusicOwner
+                    {
+                        Id = userMusic.User.Composer != null ? userMusic.User.Composer.Id : userMusic.UserId,
+                        Name = userMusic.User.Composer != null ? userMusic.User.Composer.ArtistName : userMusic.User.Name,
+                        isComposer = userMusic.User.Composer != null
+                    })
+                    .FirstOrDefault()
+                };
+
 
                 return Ok(response);
             }

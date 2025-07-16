@@ -1,5 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DisplayMusic, MusicService } from '../../services/music.service';
 
 @Component({
   selector: 'app-show-notes',
@@ -8,41 +9,45 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './show-notes.component.css',
 })
 export class ShowNotesComponent implements OnInit, OnChanges {
-  musicPiece: any;
-  pdfSrc = 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf'; //im Test hat es mit einer localen Datei nicht funktioniert, muss dann an Datenbank angepasst werden
+  musicPiece!: DisplayMusic;
+  error: boolean = false;
 
-  musicPieces = [
-    {
-      title: 'Symphonie Nr. 5',
-      composers: ['Ludwig van Beethoven'],
-      genre: 'Klassik',
-      year: 1808,
-      description:
-        'Eines der berühmtesten klassischen Werke der Musikgeschichte.',
-      sheetMusicUrl: 'sheet-music/beethoven5.pdf',
-    },
-    {
-      title: 'Die Zauberflöte',
-      composers: ['Wolfgang Amadeus Mozart'],
-      genre: 'Oper',
-      year: 1791,
-      description: 'Eine der bekanntesten Opern mit märchenhaften Elementen.',
-      sheetMusicUrl: 'assets/sheet-music/zauberfloete.png',
-    },
-  ];
-
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private musicService: MusicService) {}
 
   ngOnInit(): void {
-    //const id = this.route.snapshot.paramMap.get('id');
-    //this.musicPiece = this.musicPieces[+id!];
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
+      this.error = true // TODO: Display Error
+      return;
+    }
+
+    this.musicService.getMusic(id).subscribe({
+      next: (response) => {
+        this.musicPiece = response;
+      },
+      error: (error) => {
+        this.error = true // TODO: Display Error
+      }
+    });
     this.initializeForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['profile'] && changes['profile'].currentValue) {
+    if (changes['music'] && changes['music'].currentValue) {
       this.initializeForm();
     }
+  }
+
+  getDownloadFilename(): string {
+    if (!this.musicPiece?.contentType || !this.musicPiece?.title) return 'download';
+
+    const extension = this.musicPiece.contentType === 'application/pdf' ? '.pdf' : '.jpg';
+    return this.musicPiece.title + extension;
+  }
+
+  getDownloadText(): string {
+    if (!this.musicPiece?.contentType) return 'Herunterladen';
+    return this.musicPiece.contentType === 'application/pdf' ? 'PDF herunterladen' : 'Bild herunterladen';
   }
 
   private initializeForm(): void {

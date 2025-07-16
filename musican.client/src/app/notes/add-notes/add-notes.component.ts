@@ -59,7 +59,7 @@ export class AddNotesComponent implements OnInit {
 
       this.musicService.postMusic(formData).subscribe({
         next: (response) => {
-          this.router.navigate(['/home']); // TODO: routing
+          this.router.navigate(['/home']); // TODO: success
         },
         error: (error) => {
           this.error = true
