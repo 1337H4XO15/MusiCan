@@ -1,4 +1,4 @@
-# Mozarts Music Matrix
+# Mozarts Music Matrix - von Laurin Steudte und Talea Ziesel
 Mozart’s Music Matrix ist eine moderne Webplattform zur einfachen Verwaltung und Präsentation von Musiknoten. Nutzer können eigene Noten hochladen, durchsuchen und öffentlich oder privat verwalten – je nach Rolle (Künstler oder normaler User).
 
 ### Startseite
@@ -46,7 +46,7 @@ Die Plattform bietet eine Registrierung mit der Auswahl zwischen normalem Nutzer
 
 
 ### Bereits existierende User
-Zu Testzwecken wurden bereits User angelegt: 
+Zu Testzwecken wurden bereits User angelegt: (alle User haben folgendes Passwort: 123456)
 - Astor Piazolla
 - Wolfgang Amadeus Mozart
 - Ludwig van Beethoven
