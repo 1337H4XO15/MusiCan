@@ -5,8 +5,18 @@
 <!-- Error Display -->
 <app-error-page *ngIf="error" [error]="error" />
 
-<app-userprofile *ngIf="!isArtist" [profile]="profile" [postProfileFn]="postProfileFn" [edit]="edit" (switchToArtist)="onSwitch($event)" />
-<app-artistprofile *ngIf="isArtist" [profile]="profile" [postProfileFn]="postProfileFn" [edit]="edit" (switchToArtist)="onSwitch($event)" />
+<app-userprofile *ngIf="!isArtist"
+                 [profile]="profile"
+                 [postProfileFn]="postProfileFn"
+                 [edit]="edit"
+                 (switchToArtist)="onSwitch($event)"
+                 (errorChange)="onErrorChange($event)" />
+<app-artistprofile *ngIf="isArtist"
+                   [profile]="profile"
+                   [postProfileFn]="postProfileFn"
+                   [edit]="edit"
+                   (switchToArtist)="onSwitch($event)"
+                   (errorChange)="onErrorChange($event)" />
 
 <h3 class="text-white text-center mb-0 mt-5">
   Eigene Musikstücke

@@ -75,6 +75,10 @@ export class ProfilComponent implements OnInit {
     this.edit = event.isEdit;
   }
 
+  onErrorChange(error: string): void {
+    this.error = error;
+  }
+
   getProfile(): Observable<ProfileResponse> {
     // Token über Interceptor gesetzt
     return this.http.get<ProfileResponse>(`${this.apiUrl}/profile`)

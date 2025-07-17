@@ -3,7 +3,7 @@
   <div class="profile-card">
     <h2>Mein Profil</h2>
 
-    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+    <form *ngIf="profile" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
       <div class="profile-item">
         <label>Email:</label>
         <input *ngIf="isEditing" formControlName="email" type="email" class="form-control" />

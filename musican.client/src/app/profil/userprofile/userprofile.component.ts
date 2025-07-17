@@ -46,9 +46,9 @@ export class UserprofileComponent implements OnInit, OnChanges {
         password: ['', [Validators.required, Validators.minLength(6)]],
         isComposer: [false]
       });
-      this.errorChange.emit('');
+      setTimeout(() => this.errorChange.emit(''), 0);
     } else {
-      this.errorChange.emit('Kein gültiges Profil geladen');
+      setTimeout(() => this.errorChange.emit('Kein gültiges Profil geladen'), 0);
     }
   }
 

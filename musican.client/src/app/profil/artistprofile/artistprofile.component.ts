@@ -55,9 +55,9 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
         country: [this.profile.country, Validators.required],
         description: [this.profile.description]
       });
-      this.errorChange.emit('');
+      setTimeout(() => this.errorChange.emit(''), 0);
     } else {
-      this.errorChange.emit('Kein gültiges Profil geladen');
+      setTimeout(() => this.errorChange.emit('Kein gültiges Profil geladen'), 0);
     }
   }
 
