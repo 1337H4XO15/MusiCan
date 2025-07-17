@@ -14,7 +14,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse" id="navbarNav" #navbarCollapse>
 
       <form *ngIf="router.url === '/noten'" (ngSubmit)="onSearch()" class="d-flex">
         <input [(ngModel)]="searchTerm"
@@ -24,31 +24,30 @@
                type="search"
                placeholder="Musikstück suchen"
                aria-label="Search" />
-        <button class="btn btn-outline-light me-5" type="submit">Suchen</button>
+        <button class="btn btn-outline-light me-5" type="submit" (click)="closeNavbar(navbarCollapse)">Suchen</button>
       </form>
 
       <ul class="navbar-nav ms-auto me-3">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
-        </li>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active" (click)="closeNavbar(navbarCollapse)">Home</a>        </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/noten" routerLinkActive="active">Noten</a>
+          <a class="nav-link" routerLink="/noten" routerLinkActive="active" (click)="closeNavbar(navbarCollapse)">Noten</a>
         </li>
         <li class="nav-item">
           <a class="nav-link"
              routerLink="/komponisten"
-             routerLinkActive="active">Komponisten</a>
+             routerLinkActive="active" (click)="closeNavbar(navbarCollapse)">Komponisten</a>
         </li>
         @if (!isLoggedIn) {
         <li class="nav-item">
-          <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+          <a class="nav-link" routerLink="/login" routerLinkActive="active" (click)="closeNavbar(navbarCollapse)">Login</a>
         </li>
         } @else {
         <li class="nav-item">
-          <a class="nav-link" routerLink="/profil" routerLinkActive="active">Profil</a>
+          <a class="nav-link" routerLink="/profil" routerLinkActive="active" (click)="closeNavbar(navbarCollapse)">Profil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="logout()">Logout</a>
+          <a class="nav-link" (click)="logout(); closeNavbar(navbarCollapse)">Logout</a>
         </li>
         }
       </ul>

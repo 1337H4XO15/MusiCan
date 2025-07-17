@@ -45,7 +45,6 @@ export class NotesComponent implements OnInit {
 
     this.searchService.searchTerm$.subscribe(term => {
       this.searchTerm = term;
-      console.log('Suchbegriff empfangen:', term);
       if (!this.random && !this.own) {
         this.filterPieces(this.searchTerm);
       }
