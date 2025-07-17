@@ -13,6 +13,7 @@ import { MusicService } from '../../services/music.service';
 export class AddNotesComponent implements OnInit {
   musicForm: FormGroup;
   error: boolean = false;
+  errorMsg: string = '';
   selectedFile: File | null = null;
 
   constructor(
@@ -36,13 +37,24 @@ export class AddNotesComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: Event) {
+  onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input?.files?.length) {
-      this.selectedFile = input.files[0];
-      this.musicForm.patchValue({ file: this.selectedFile });
-      this.musicForm.get('file')?.updateValueAndValidity();
+
+    if (!input?.files?.length) return;
+
+    const file = input.files[0];
+
+    // prüfen, ob es sich um eine PDF-Datei handelt
+    if (file.type !== 'application/pdf') {
+      this.errorMsg = 'Es dürfen nur PD-Dateien hochgeladen werden.'; 
+      input.value = '';
+      return;
     }
+
+    this.selectedFile = file;
+
+    this.musicForm.patchValue({ file: this.selectedFile });
+    this.musicForm.get('file')?.updateValueAndValidity();
   }
 
   onSubmit(): void {

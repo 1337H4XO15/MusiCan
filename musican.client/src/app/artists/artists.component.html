@@ -17,7 +17,7 @@
       <div class="card-back">
         <h3>{{ artist.artistName }}</h3>
         <p><strong>Genre:</strong> {{ artist.genre }}</p>
-        <p><strong>Geburtsjahr:</strong> {{ artist.birthYear }}</p>
+        <p><strong>Geburtsjahr:</strong> {{ artist.birthYear | date:'yyyy' }}</p>
         <p><strong>Land:</strong> {{ artist.country }}</p>
         <p class="desc">{{ artist.description ?? '-' }}</p>
       </div>

@@ -116,3 +116,17 @@ input::placeholder {
 .info {
   margin-left: 10px;
 }
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 78, 78, 0.15);
+  color: #ff4e4e;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(255, 78, 78, 0.08);
+}

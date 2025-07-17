@@ -8,6 +8,7 @@
   <h2 class="text-center text-white mb-5">Öffentliche Musikstücke</h2>
   }
 
+  @if (musicPieces) {
   <div class="row g-4">
     <div class="col-md-6 col-lg-4"
          *ngFor="let piece of musicPieces; let i = index">
@@ -16,13 +17,13 @@
         <div class="card h-100 border-0 shadow-sm bg-white hover-shadow transition">
           <div class="card-body">
             @if (own) {
-              <button class="btn btn-sm position-absolute top-0 end-0 m-2 delete-button"
-                      (click)="setSelectedPiece(i); $event.preventDefault(); $event.stopPropagation();"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#deleteModal">
-                <i class="bi bi-trash"></i>
-              </button>
+            <button class="btn btn-sm position-absolute top-0 end-0 m-2 delete-button"
+                    (click)="setSelectedPiece(i); $event.preventDefault(); $event.stopPropagation();"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal">
+              <i class="bi bi-trash"></i>
+            </button>
             }
             <h5 class="card-title text-primary">{{ piece.title }}</h5>
             <p class="card-text mb-1">
@@ -31,12 +32,19 @@
             <p class="card-text mb-1">
               <strong>Genre:</strong> {{ piece.genre ?? "-" }}
             </p>
-            <p class="card-text"><strong>Jahr:</strong> {{ piece.publication ?? "-"  }}</p>
+            <p class="card-text"><strong>Jahr:</strong> {{ piece.publication ? (piece.publication | date:'yyyy') : "-"  }}</p>
           </div>
         </div>
       </a>
     </div>
   </div>
+  } @else {
+  <div class="text-center text-white">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  }
 </div>
 
 <!-- Modal -->
@@ -57,3 +65,11 @@
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <div class="text-white text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Lade Musikstücke...</span>
+    </div>
+  </div>
+</ng-template>

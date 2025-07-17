@@ -22,7 +22,7 @@
       </li>
       <li>
         <i class="bi bi-calendar-event me-2"></i>
-        <strong>Erscheinungsjahr:</strong> {{ musicPiece.publication ?? "-" }}
+        <strong>Erscheinungsjahr:</strong> {{ musicPiece.publication ? (musicPiece.publication | date:'yyyy') : "-" }}
       </li>
       <!--<li>
     <i class="bi bi-file-text me-2"></i>
