@@ -3,25 +3,35 @@ Mozart’s Music Matrix ist eine moderne Webplattform zur einfachen Verwaltung u
 
 ### Startseite
 Auf der Startseite werden 10 zufällige öffentliche Musikstücke angezeigt. Diese dienen zur Inspiration und als schneller Einstieg in das musikalische Repertoire der Plattform. Jeder Besucher kann diese Stücke sehen, Details dazu aufrufen und PDF-Dateien herunterladen.
-<img width="1897" height="970" alt="image" src="https://github.com/user-attachments/assets/6c9b97c5-ef55-4a73-968a-7839710948e3" />
+
+<img src="https://github.com/user-attachments/assets/6c9b97c5-ef55-4a73-968a-7839710948e3" alt="Startseite" width="60%" />
+
 
 ### Öffentliche Noten
 Auf der „Noten“-Seite finden Nutzer eine vollständige Liste aller öffentlichen Musikstücke, die von Künstlern hochgeladen wurden. Über eine Suchzeile kann gezielt nach Titeln gefiltert werden. Die Musikstücke können angeklickt werden, um Detailinformationen zu sehen und das zugehörige PDF herunterzuladen.
-<img width="1865" height="973" alt="image" src="https://github.com/user-attachments/assets/2f19e90d-0306-455c-b26f-c69ae04242f0" />
+
+<img src="https://github.com/user-attachments/assets/2f19e90d-0306-455c-b26f-c69ae04242f0" alt="Öffentliche Noten" width="60%" />
+
 
 ### Musikstück - Details
 Beim Klick auf ein Musikstück öffnet sich eine Detailansicht, die weitere Informationen wie Komponist, Genre, Jahr und Download-Link zeigt. Diese Seite bietet einen übersichtlichen Einblick in einzelne Werke.
-<img width="492" height="781" alt="image" src="https://github.com/user-attachments/assets/5d68f275-12e9-49d5-91c6-068c5bc7b1e0" />
+
+<img src="https://github.com/user-attachments/assets/5d68f275-12e9-49d5-91c6-068c5bc7b1e0" alt="Details eines Musikstücks" width="30%" />
+
 
 ### Komponister - Verzeichnis
 In einem separaten Bereich werden alle registrierten Komponisten der Plattform gelistet. Dies erleichtert das Auffinden von Künstlern und ihren Werken und stärkt die Vernetzung.
-<img width="1766" height="960" alt="image" src="https://github.com/user-attachments/assets/8b479289-4e78-4986-8e48-0843537cfbad" />
+
+<img src="https://github.com/user-attachments/assets/8b479289-4e78-4986-8e48-0843537cfbad" alt="Komponistenübersicht" width="60%" />
+
 
 ### Noten hochladen
 Auf der Upload-Seite können Nutzer ein neues Musikstück einreichen. Es werden Informationen wie Titel, Genre, Jahr und eine PDF-Datei hochgeladen.
 - Für normale Nutzer: hochgeladene Noten sind privat, nur sie selbst können sie sehen.
 - Für Künstler/Komponisten: hochgeladene Noten sind öffentlich sichtbar.
-<img width="963" height="984" alt="image" src="https://github.com/user-attachments/assets/6ba1ebae-2e3b-4c5a-b8a7-6a4c8e647073" />
+
+<img src="https://github.com/user-attachments/assets/6ba1ebae-2e3b-4c5a-b8a7-6a4c8e647073" alt="Noten hochladen" width="50%" />
+
 
 ### Benutzerprofil und eigene Noten
 Im Benutzerprofil können Nutzer ihre Profilinformationen aktualisieren sowie ihre hochgeladenen Noten einsehen und bei Bedarf löschen. Dies gilt sowohl für öffentliche als auch für private Werke.
@@ -30,8 +40,8 @@ Im Benutzerprofil können Nutzer ihre Profilinformationen aktualisieren sowie ih
 
 ### Login und Registrierung
 Die Plattform bietet eine Registrierung mit der Auswahl zwischen normalem Nutzer oder Komponist. Anschließend können sich Benutzer über die Login-Seite anmelden, um alle Funktionen nutzen zu können.
-<img width="670" height="612" alt="image" src="https://github.com/user-attachments/assets/c75fa6ee-685b-4340-91eb-6c124787dede" />
-<img width="645" height="746" alt="image" src="https://github.com/user-attachments/assets/03e3e085-fb53-4f8f-a3a1-35385370fe56" />
+
+<img src="https://github.com/user-attachments/assets/dfc7efed-1f0c-486b-b952-c43217d63854" alt="Profil bearbeiten" width="50%" /> <br> <img src="https://github.com/user-attachments/assets/36a4132a-157c-41ed-933d-a4046d3e7d04" alt="Eigene Noten verwalten" width="60%" />
 
 
 ### Bereits existierende User
