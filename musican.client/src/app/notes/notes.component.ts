@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MusicListResponse, MusicService } from '../services/music.service';
 import { SearchService } from '../services/search.service';
 
@@ -21,7 +20,6 @@ export class NotesComponent implements OnInit {
 
   constructor(
     private musicService: MusicService,
-    private router: Router,
     private searchService: SearchService
   ) { }
 

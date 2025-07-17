@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MusiCan.Server.Data;
 using MusiCan.Server.Helper;
 using MusiCan.Server.Services;
@@ -140,47 +139,11 @@ namespace MusiCan.Server.Controllers
         /// </summary>
         /// <returns>Liste der öffentlichen Musikstücke</returns>
         [HttpGet("music")]
-        [Authorize(Policy = "NotBanned")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetMusic()
         {
             try
             {
-                #region User
-                if (HttpContext.User.Identity is not ClaimsIdentity identity)
-                {
-                    Log.Warning($"Error during Music: HttpContext.User.Identity is not ClaimsIdentity (invalid token).");
-                    InvalidTokenErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
-                }
-
-                IEnumerable<Claim> userClaims = identity.Claims;
-
-                string? user_id_s = userClaims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-
-                if (user_id_s == null)
-                {
-                    Log.Warning($"Error during Music: invalid token.");
-                    InvalidTokenErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
-                }
-
-                if (!Guid.TryParse(user_id_s, out Guid user_id))
-                {
-                    Log.Warning($"Error during Music of user {user_id_s}: could not parse user id.");
-                    InvalidTokenErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
-                }
-
-                User? user = await _profileService.GetUserByIdAsync(user_id);
-
-                if (user == null)
-                {
-                    Log.Warning($"Error during Music: user {user_id} no found.");
-                    InvalidTokenErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
-                }
-                #endregion
-
                 List<Music> publicMusic = await _musicService.GetPublicMusicAsync();
 
                 List<DisplayMusic> response = [.. publicMusic

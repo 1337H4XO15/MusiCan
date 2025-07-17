@@ -12,22 +12,22 @@ namespace MusiCan.Server.Services
         /// <summary>
         /// Erstellt einen Musik Eintrag
         /// </summary>
-        /// <param name="music">Musik Eintrag</param>
+        /// <param Name="music">Musik Eintrag</param>
         /// <returns>True bei Erfolg</returns>
         Task<bool> CreateMusicAsync(Music music);
 
         /// <summary>
         /// Bearbeitet einen Musik Eintrag
         /// </summary>
-        /// <param name="musicId">Musik ID</param>
-        /// <param name="request">neue Musik Daten</param>
+        /// <param Name="musicId">Musik ID</param>
+        /// <param Name="request">neue Musik Daten</param>
         /// <returns>Musik oder Error</returns>
         Task<(Music?, string)> UpdateMusicAsync(MusicRequest request);
 
         /// <summary>
         /// Löscht einen Musik Eintrag
         /// </summary>
-        /// <param name="musicId">Musik Eintrag ID</param>
+        /// <param Name="musicId">Musik Eintrag ID</param>
         /// <returns></returns>
         Task<bool> DeleteMusicByIdAsync(Guid musicId);
 
@@ -46,15 +46,15 @@ namespace MusiCan.Server.Services
         /// <summary>
         /// Holt alle Musik Einträge des Nutzers 
         /// </summary>
-        /// <param name="userId">Nutzer ID</param>
+        /// <param Name="userId">Nutzer ID</param>
         /// <returns>Liste mit den Musik Einträgen</returns>
         Task<List<Music>> GetMusicByUserIdAsync(Guid userId);
 
         /// <summary>
         /// Holt Musik Einträge mit, wenn Nutzer Nutzer gültig
         /// </summary>
-        /// <param name="musicId">Musik Eintrag ID</param>
-        /// <param name="userId">Nutzer ID</param>
+        /// <param Name="musicId">Musik Eintrag ID</param>
+        /// <param Name="userId">Nutzer ID</param>
         /// <returns>Liste mit den Musik Einträgen</returns>
         Task<Music?> GetMusicByIdAsync(Guid musicId, Guid? userId);
     }

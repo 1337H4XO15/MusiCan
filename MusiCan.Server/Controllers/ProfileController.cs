@@ -91,7 +91,7 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Put Anfrage um eigenes Nutzer- / Künstlerprofil zu ändern
         /// </summary>
-        /// <param name="profile">Nutzer- / Künstlerprofil</param>
+        /// <param Name="profile">Nutzer- / Künstlerprofil</param>
         /// <returns>Nutzer- oder Künstlerprofil</returns>
         [HttpPut("profile")]
         [Authorize(Policy = "NotBanned")]
@@ -181,7 +181,7 @@ namespace MusiCan.Server.Controllers
         /// </summary>
         /// <returns>Liste der Künstlerprofile</returns>
         [HttpGet("composers")]
-        [Authorize(Policy = "NotBanned")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetComposers()
         {
             try
@@ -212,10 +212,10 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Get Anfrage um ein Künstlerprofil abzufragen
         /// </summary>
-        /// <param name="id">Künstler ID</param>
+        /// <param Name="id">Künstler ID</param>
         /// <returns>Künstlerprofil</returns>
         [HttpGet("composer/{id}")]
-        [Authorize(Policy = "NotBanned")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetComposer(Guid id)
         {
             try

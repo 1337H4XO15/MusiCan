@@ -57,11 +57,11 @@
 
     public class AuthResponse
     {
-        public string authToken { get; set; }
+        public string AuthToken { get; set; }
 
-        public string name { get; set; }
+        public string Name { get; set; }
         
-        public DateTime expireTime { get; set; }
+        public DateTime ExpireTime { get; set; }
     }
 
     public class ProfileResponse

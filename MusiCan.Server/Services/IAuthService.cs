@@ -11,29 +11,29 @@ namespace MusiCan.Server.Services
         /// <summary>
         /// überprüft ob ein Nutzer mit diesem Nutzername bereits vorhanden ist
         /// </summary>
-        /// <param name="user_name">Nutzername</param>
+        /// <param Name="user_name">Nutzername</param>
         /// <returns>True wenn ein Nutzer diesen Nutzername hat</returns>
         Task<bool> CheckUserNameAsync(string username);
         /// <summary>
         /// überprüft ob ein Nutzer mit dieser email bereits vorhanden ist
         /// </summary>
-        /// <param name="mail">email</param>
+        /// <param Name="mail">email</param>
         /// <returns>True wenn ein Nutzer diesen email hat</returns>
         Task<bool> CheckUserMailAsync(string mail);
         /// <summary>
         /// Nutzer neu Erstellen, wenn DeviceHash noch nicht verwendet
         /// </summary>
-        /// <param name="username">Nutzername</param>
-        /// <param name="password">password</param>
-        /// <param name="mail">email</param>
-        /// <param name="role">Rolle</param>
+        /// <param Name="username">Nutzername</param>
+        /// <param Name="password">password</param>
+        /// <param Name="mail">email</param>
+        /// <param Name="role">Rolle</param>
         /// <returns>Nutzer</returns>
         Task<User?> CreateUserAsync(string username, string password, string mail, Roles role);
         /// <summary>
         /// Nutzer aus User Datenbank auslesen und password DeviceHash überprüfen
         /// </summary>
-        /// <param name="namemail">Nutzername oder email</param>
-        /// <param name="password">password DeviceHash</param>
+        /// <param Name="namemail">Nutzername oder email</param>
+        /// <param Name="password">password DeviceHash</param>
         /// <returns>Nutzer</returns>
         Task<User?> AuthenticateAsync(string namemail, string password);
     }

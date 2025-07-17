@@ -18,7 +18,7 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Post Anfrage um einen Nutzer zu registrieren 
         /// </summary>
-        /// <param name="reg">name, password, email und isComposer</param>
+        /// <param Name="reg">Name, password, email und isComposer</param>
         /// <returns>JsonWebToken, Nutzername, Ablaufdatum</returns>
         [AllowAnonymous]
         [HttpPost("register")]
@@ -54,9 +54,9 @@ namespace MusiCan.Server.Controllers
 
                 AuthResponse response = new()
                 {
-                    authToken = accessToken,
-                    name = user.Name,
-                    expireTime = expire
+                    AuthToken = accessToken,
+                    Name = user.Name,
+                    ExpireTime = expire
                 };
 
                 return Ok(response);
@@ -72,7 +72,7 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Post Anfrage um einen Nutzer einzuloggen 
         /// </summary>
-        /// <param name="login">nam, password, remember</param>
+        /// <param Name="login">nam, password, remember</param>
         /// <returns>JsonWebToken, Nutzername, Ablaufdatum</returns>
         [AllowAnonymous]
         [HttpPost("login")]
@@ -100,9 +100,9 @@ namespace MusiCan.Server.Controllers
 
                 AuthResponse response = new()
                 {
-                    authToken = accessToken,
-                    name = user.Name,
-                    expireTime = expire
+                    AuthToken = accessToken,
+                    Name = user.Name,
+                    ExpireTime = expire
                 };
 
                 return Ok(response);

@@ -22,9 +22,9 @@ namespace MusiCan.Server.Data
         /// <summary>
         /// generiert ein JsonWebToken 
         /// </summary>
-        /// <param name="user">Nutzer</param>
-        /// <param name="jwt">JsonWebToken Einstellungen</param>
-        /// <param name="expiration_time">Token Auslaufzeit in Minuten</param>
+        /// <param Name="user">Nutzer</param>
+        /// <param Name="jwt">JsonWebToken Einstellungen</param>
+        /// <param Name="expiration_time">Token Auslaufzeit in Minuten</param>
         /// <returns>JsonWebToken</returns>
         public static (string, DateTime) GenerateAccessToken(User user, Jwt jwt, int expiration_time)
         {
