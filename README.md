@@ -35,13 +35,14 @@ Auf der Upload-Seite können Nutzer ein neues Musikstück einreichen. Es werden 
 
 ### Benutzerprofil und eigene Noten
 Im Benutzerprofil können Nutzer ihre Profilinformationen aktualisieren sowie ihre hochgeladenen Noten einsehen und bei Bedarf löschen. Dies gilt sowohl für öffentliche als auch für private Werke.
-<img width="930" height="970" alt="image" src="https://github.com/user-attachments/assets/dfc7efed-1f0c-486b-b952-c43217d63854" />
-<img width="1800" height="967" alt="image" src="https://github.com/user-attachments/assets/36a4132a-157c-41ed-933d-a4046d3e7d04" />
+
+<img src="https://github.com/user-attachments/assets/dfc7efed-1f0c-486b-b952-c43217d63854" alt="Profil bearbeiten" width="50%" /> <br> <img src="https://github.com/user-attachments/assets/36a4132a-157c-41ed-933d-a4046d3e7d04" alt="Eigene Noten verwalten" width="60%" />
+
 
 ### Login und Registrierung
 Die Plattform bietet eine Registrierung mit der Auswahl zwischen normalem Nutzer oder Komponist. Anschließend können sich Benutzer über die Login-Seite anmelden, um alle Funktionen nutzen zu können.
 
-<img src="https://github.com/user-attachments/assets/dfc7efed-1f0c-486b-b952-c43217d63854" alt="Profil bearbeiten" width="50%" /> <br> <img src="https://github.com/user-attachments/assets/36a4132a-157c-41ed-933d-a4046d3e7d04" alt="Eigene Noten verwalten" width="60%" />
+<img src="https://github.com/user-attachments/assets/c75fa6ee-685b-4340-91eb-6c124787dede" alt="Login" width="40%" /> <br> <img src="https://github.com/user-attachments/assets/03e3e085-fb53-4f8f-a3a1-35385370fe56" alt="Registrierung" width="40%" />
 
 
 ### Bereits existierende User
