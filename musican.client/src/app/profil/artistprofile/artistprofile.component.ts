@@ -133,7 +133,7 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
     formData.append('isComposer', formValue.isComposer);
 
     if (this.selectedProfileImage) {
-      formData.append('mimetype', this.selectedProfileImage.type); 
+      formData.append('mimetype', this.selectedProfileImage.type);
       formData.append('profileImage', this.selectedProfileImage);
     }
 
@@ -153,5 +153,31 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
     });
 
     this.toggleEdit();
+  }
+
+
+  // Helper-Methoden für Template
+  get password() {
+    return this.artistForm.get('password');
+  }
+
+  get birthYear() {
+    return this.artistForm.get('birthYear');
+  }
+
+  get genre() {
+    return this.artistForm.get('genre');
+  }
+
+  get country() {
+    return this.artistForm.get('country');
+  }
+
+  get email() {
+    return this.artistForm.get('email');
+  }
+
+  get name() {
+    return this.artistForm.get('name');
   }
 }

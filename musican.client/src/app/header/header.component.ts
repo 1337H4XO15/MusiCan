@@ -1,8 +1,11 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { SearchService } from '../services/search.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-header',
@@ -13,6 +16,8 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
   searchTerm: string = '';
+  private routerSubscription?: Subscription;
+
 
   @Output() search = new EventEmitter<string>();
 
@@ -20,12 +25,22 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkLoginStatus();
+
+    //bei dieser Funktion hat KI unterstützt
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.urlAfterRedirects !== '/noten') {
+          this.searchTerm = '';
+          this.searchService.setSearchTerm('');
+        }
+      });
   }
 
   checkLoginStatus(): void {
     this.authService.currentUser$.subscribe(user => {
       this.isLoggedIn = user !== null;
-    }); //nicht ändern, this.authService.isLoggedIn() kann nicht subscibed werden, deshalb funktioniert es damit nicht
+    }); //this.authService.isLoggedIn() kann nicht subscibed werden, deshalb funktioniert es damit nicht
   }
 
   logout(): void {
@@ -33,13 +48,21 @@ export class HeaderComponent implements OnInit {
   }
 
   onSearch() {
-    console.log('Suchbegriff:', this.searchTerm);
     this.searchService.setSearchTerm(this.searchTerm);
   }
 
   onSearchIfCleared(term: string) {
     if (term === '') {
       this.onSearch();
+    }
+  }
+
+  //bei dieser Funktion hat KI unterstützt
+  closeNavbar(navbarCollapse: HTMLElement): void {
+    if (window.innerWidth < 992) { // Nur bei kleinen Geräten
+      const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse)
+        || new bootstrap.Collapse(navbarCollapse, { toggle: false });
+      bsCollapse.hide();
     }
   }
 }

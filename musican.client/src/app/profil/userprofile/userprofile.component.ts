@@ -92,4 +92,11 @@ export class UserprofileComponent implements OnInit, OnChanges {
 
     this.toggleEdit();
   }
+
+  get password() { return this.profileForm.get('password'); }
+  get name() { return this.profileForm.get('name'); }
+
+  get email() {
+    return this.profileForm.get('email');
+  }
 }
