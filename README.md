@@ -9,7 +9,7 @@ Auf der Startseite werden 10 zufällige öffentliche Musikstücke angezeigt. Die
 
 
 
-##Öffentliche Noten
+## Öffentliche Noten
 Auf der „Noten“-Seite finden Nutzer eine vollständige Liste aller öffentlichen Musikstücke, die von Künstlern hochgeladen wurden. Über eine Suchzeile kann gezielt nach Titeln gefiltert werden. Die Musikstücke können angeklickt werden, um Detailinformationen zu sehen und das zugehörige PDF herunterzuladen.
 
 <img src="https://github.com/user-attachments/assets/2f19e90d-0306-455c-b26f-c69ae04242f0" alt="Öffentliche Noten" width="60%" />
