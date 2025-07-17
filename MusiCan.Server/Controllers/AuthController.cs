@@ -5,6 +5,8 @@ using MusiCan.Server.Data;
 using MusiCan.Server.Helper;
 using MusiCan.Server.Services;
 using Serilog;
+using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusiCan.Server.Controllers
 {
@@ -18,11 +20,11 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Post Anfrage um einen Nutzer zu registrieren 
         /// </summary>
-        /// <param Name="reg">Name, password, email und isComposer</param>
+        /// <param name="reg">Name, password, email und isComposer</param>
         /// <returns>JsonWebToken, Nutzername, Ablaufdatum</returns>
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Registration([FromBody] RegistrationRequest reg)
+        public async Task<IActionResult> Registration([FromForm] ProfileRequest reg)
         {
             try
             {
@@ -40,9 +42,22 @@ namespace MusiCan.Server.Controllers
                     return StatusCode(error.StatusCode, error.Message);
                 }
 
-                //string hashedPW = SecretHasher.GenerateSaltedPassword(reg.password, reg.Salt);
-                //password is already Hashed by the client on Registration
-                User? user = await _authService.CreateUserAsync(reg.name, reg.password, reg.email, reg.isComposer ? Roles.Kuenstler : Roles.Nutzer);
+                if (reg.isComposer && reg.profileImage != null && !string.IsNullOrEmpty(reg.mimetype))
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await reg.profileImage.CopyToAsync(memoryStream);
+                        reg.profileImage_b = memoryStream.ToArray();
+                    }
+
+                    if (reg.profileImage_b == null)
+                    {
+                        return Conflict("Could not create user.");
+                    }
+                }
+
+                (User? user, string createError) = await _authService.CreateUserAsync(reg);
+
                 if (user == null)
                 {
                     Log.Warning($"Error during Registration of user {reg.name}: user not created.");
@@ -72,7 +87,7 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Post Anfrage um einen Nutzer einzuloggen 
         /// </summary>
-        /// <param Name="login">nam, password, remember</param>
+        /// <param name="login">name, password, remember</param>
         /// <returns>JsonWebToken, Nutzername, Ablaufdatum</returns>
         [AllowAnonymous]
         [HttpPost("login")]

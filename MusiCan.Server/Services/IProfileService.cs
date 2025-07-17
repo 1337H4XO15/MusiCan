@@ -11,22 +11,22 @@ namespace MusiCan.Server.Services
         /// <summary>
         /// gibt den Nutzer mit passender Nutzer ID zurück, läd auch den Komponisten, wenn vorhanden
         /// </summary>
-        /// <param Name="id">Nutzer ID</param>
+        /// <param name="id">Nutzer ID</param>
         /// <returns>Nutzer</returns>
         Task<User?> GetUserByIdAsync(Guid id);
 
         /// <summary>
         /// Bearbeitet einen Nutzer und gibt diesen dann zurück
         /// </summary>
-        /// <param Name="userId">Nutzer ID</param>
-        /// <param Name="request">neue Profil Daten</param>
+        /// <param name="userId">Nutzer ID</param>
+        /// <param name="request">neue Profil Daten</param>
         /// <returns>Nutzer oder Error</returns>
         Task<(User?, string)> UpdateUserAsync(Guid userId, ProfileRequest request);
 
         /// <summary>
         /// gibt den Komponist mit passender Komponist ID zurück
         /// </summary>
-        /// <param Name="id">Komponist ID</param>
+        /// <param name="id">Komponist ID</param>
         /// <returns>Komponist</returns>
         Task<Composer?> GetComposerByIdAsync(Guid id);
 
@@ -74,6 +74,7 @@ namespace MusiCan.Server.Services
                 // Nutzer
                 user.Name = request.name;
                 user.EMail = request.email;
+                user.Password = SecretHasher.Hash(request.password);
 
                 if (user.Role == Roles.Kuenstler && !request.isComposer)
                 {

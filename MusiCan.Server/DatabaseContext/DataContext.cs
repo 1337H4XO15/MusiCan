@@ -19,7 +19,7 @@ namespace MusiCan.Server.DatabaseContext
         /// n:n Beziehung zwischen Nutzer und Musik
         /// 1:1 Beziehung zwischen Musik und Composer
         /// </summary>
-        /// <param Name="modelBuilder"></param>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserMusic>()

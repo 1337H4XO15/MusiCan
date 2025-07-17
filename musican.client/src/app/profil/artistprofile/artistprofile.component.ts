@@ -27,7 +27,7 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
   @Input() edit!: boolean;
   @Output() switchToArtist = new EventEmitter<{ isArtist: boolean, isEdit: boolean }>();
 
-  async ngOnInit() {
+  ngOnInit() {
     this.isEditing = this.edit;
     this.preloadDefaultImage();
     this.initializeForm();
@@ -62,6 +62,11 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
   }
 
   toggleEdit(): void {
+    if (this.isEditing) {
+      this.initializeForm();
+      this.selectedProfileImage = null;
+      this.profileImagePreview = null;
+    }
     this.isEditing = !this.isEditing;
   }
 

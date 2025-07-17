@@ -2,17 +2,6 @@
 
 namespace MusiCan.Server.Helper
 {
-    public class RegistrationRequest
-    {
-        public required string name { get; set; }
-
-        public required string password { get; set; }
-
-        public required string email { get; set; }
-
-        public required bool isComposer { get; set; }
-    }
-
     public class LoginRequest
     {
         public required string nameOrMail { get; set; }
@@ -20,7 +9,6 @@ namespace MusiCan.Server.Helper
         public required string password { get; set; }
 
         public bool remember { get; set; }
-
     }
 
     public class ProfileRequest
@@ -47,7 +35,6 @@ namespace MusiCan.Server.Helper
         public string? country { get; set; }
 
         public string? description { get; set; }
-
     }
 
     public class MusicRequest

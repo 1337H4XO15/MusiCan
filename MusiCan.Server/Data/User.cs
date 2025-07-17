@@ -31,6 +31,7 @@ namespace MusiCan.Server.Data
 
         public User(string name, string password, string email, Roles role)
         {
+            UserId = Guid.NewGuid();
             Name = name;
             Password = password;
             EMail = email;

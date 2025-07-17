@@ -91,7 +91,7 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Put Anfrage um eigenes Nutzer- / Künstlerprofil zu ändern
         /// </summary>
-        /// <param Name="profile">Nutzer- / Künstlerprofil</param>
+        /// <param name="profile">Nutzer- / Künstlerprofil</param>
         /// <returns>Nutzer- oder Künstlerprofil</returns>
         [HttpPut("profile")]
         [Authorize(Policy = "NotBanned")]
@@ -135,7 +135,7 @@ namespace MusiCan.Server.Controllers
 
                     if (profile.profileImage_b == null)
                     {
-                        return Conflict("Could not create music.");
+                        return Conflict("Could not update user.");
                     }
                 }
 
@@ -212,7 +212,7 @@ namespace MusiCan.Server.Controllers
         /// <summary>
         /// Http Get Anfrage um ein Künstlerprofil abzufragen
         /// </summary>
-        /// <param Name="id">Künstler ID</param>
+        /// <param name="id">Künstler ID</param>
         /// <returns>Künstlerprofil</returns>
         [HttpGet("composer/{id}")]
         [AllowAnonymous]

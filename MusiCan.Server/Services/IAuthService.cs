@@ -11,29 +11,26 @@ namespace MusiCan.Server.Services
         /// <summary>
         /// überprüft ob ein Nutzer mit diesem Nutzername bereits vorhanden ist
         /// </summary>
-        /// <param Name="user_name">Nutzername</param>
+        /// <param name="user_name">Nutzername</param>
         /// <returns>True wenn ein Nutzer diesen Nutzername hat</returns>
         Task<bool> CheckUserNameAsync(string username);
         /// <summary>
         /// überprüft ob ein Nutzer mit dieser email bereits vorhanden ist
         /// </summary>
-        /// <param Name="mail">email</param>
+        /// <param name="mail">email</param>
         /// <returns>True wenn ein Nutzer diesen email hat</returns>
         Task<bool> CheckUserMailAsync(string mail);
-        /// <summary>
-        /// Nutzer neu Erstellen, wenn DeviceHash noch nicht verwendet
-        /// </summary>
-        /// <param Name="username">Nutzername</param>
-        /// <param Name="password">password</param>
-        /// <param Name="mail">email</param>
-        /// <param Name="role">Rolle</param>
-        /// <returns>Nutzer</returns>
-        Task<User?> CreateUserAsync(string username, string password, string mail, Roles role);
+		/// <summary>
+		/// Nutzer neu Erstellen
+		/// </summary>
+		/// <param name="request">Nutzer / Künstlerprofil</param>
+		/// <returns>Nutzer oder Error</returns>
+		Task<(User?, string)> CreateUserAsync(ProfileRequest request);
         /// <summary>
         /// Nutzer aus User Datenbank auslesen und password DeviceHash überprüfen
         /// </summary>
-        /// <param Name="namemail">Nutzername oder email</param>
-        /// <param Name="password">password DeviceHash</param>
+        /// <param name="namemail">Nutzername oder email</param>
+        /// <param name="password">password DeviceHash</param>
         /// <returns>Nutzer</returns>
         Task<User?> AuthenticateAsync(string namemail, string password);
     }
@@ -70,30 +67,63 @@ namespace MusiCan.Server.Services
             return false;
         }
 
-        public async Task<User?> CreateUserAsync(string username, string password, string mail, Roles role)
+        public async Task<(User?, string)> CreateUserAsync(ProfileRequest request)
         {
             var transaction = _dataContext.Database.BeginTransaction();
 
             try
             {
-                string hash = SecretHasher.Hash(password);
+                string password = SecretHasher.Hash(request.password);
 
-                User user = new(username, hash, mail, role);
-                _dataContext.Add(user);
+                User user = new(request.name, password, request.email, Roles.Nutzer);
+
+                if (request.isComposer)
+                {
+                    user.Role = Roles.Kuenstler;
+					user.Composer = new Composer { UserId = user.UserId };
+
+					if (string.IsNullOrEmpty(request.genre) || string.IsNullOrEmpty(request.country)
+		                || string.IsNullOrEmpty(request.birthYear))
+					{
+						return (null, "Missing Composer Attributes.");
+					}
+
+					user.Composer.ArtistName = request.name;
+					user.Composer.Genre = request.genre;
+					user.Composer.Country = request.country;
+					user.Composer.Description = request.description;
+					if (request.profileImage != null && !string.IsNullOrEmpty(request.mimetype))
+					{
+						user.Composer.ProfileImage = request.profileImage_b;
+						user.Composer.ProfileImageContentType = request.mimetype;
+					}
+					if (int.TryParse(request.birthYear, out int year))
+					{
+						user.Composer.BirthYear = new DateTime(year, 1, 1);
+					}
+					else
+					{
+						user.Composer.BirthYear = DateTime.MinValue;
+					}
+				}
+
+				_dataContext.Add(user);
 
                 await _dataContext.SaveChangesAsync();
 
-                transaction.Commit();
+				await transaction.CommitAsync();
 
-                return user;
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                Log.Error($"Error while creating user {ex}");
-                return null; // schreiben in DB fehlgeschlagen
-            }      
-        }
+				Log.Information($"User {user.UserId} created successfully.");
+
+				return (user, "");
+			}
+			catch (Exception ex)
+			{
+				await transaction.RollbackAsync();
+				Log.Error($"Error while creating user {ex}");
+			}
+			return (null, "Something unexpected happend.");
+		}
 
         public async Task<User?> AuthenticateAsync(string namemail, string password)
         {

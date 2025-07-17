@@ -25,8 +25,8 @@ namespace MusiCan.Server.Helper
         /// <summary>
         /// compares input password with db stored pw and salt
         /// </summary>
-        /// <param Name="input">input password gets Salted and compared</param>
-        /// <param Name="hashString">salted password from the db</param>
+        /// <param name="input">input password gets Salted and compared</param>
+        /// <param name="hashString">salted password from the db</param>
         /// <returns>True if derived Hash equals stored Hash</returns>
         public static bool VerifyHash(string input, string hashString)
         {
