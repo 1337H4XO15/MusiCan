@@ -72,11 +72,13 @@ export class AuthService {
       );
   }
 
-  logout(): void {
+  logout(redirect: boolean = true): void {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('tokenExpiry');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/home']);
+    if (redirect) {
+      this.router.navigate(['/home']);
+    }
   }
 
   getCurrentUser(): User | null {

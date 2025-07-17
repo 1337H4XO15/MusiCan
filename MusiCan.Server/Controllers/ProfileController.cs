@@ -84,7 +84,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during Profile of unknown user: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -135,7 +135,7 @@ namespace MusiCan.Server.Controllers
 
                     if (profile.profileImage_b == null)
                     {
-                        return Conflict("Could not update user.");
+                        return Conflict("Nutzer konnte nicht erstellt werden, Profilbild ungültig.");
                     }
                 }
 
@@ -172,7 +172,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error when updating Profile of unknown user: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -205,7 +205,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during Composers: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -224,7 +224,7 @@ namespace MusiCan.Server.Controllers
 
                 if (composer == null)
                 {
-                    return NotFound("Composer not found.");
+                    return NotFound("Komponist nicht gefunden.");
                 }
 
                 DisplayComposer response = new()
@@ -244,7 +244,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during Composer: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
     }

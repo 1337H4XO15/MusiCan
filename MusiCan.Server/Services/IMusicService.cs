@@ -32,7 +32,7 @@ namespace MusiCan.Server.Services
         Task<bool> DeleteMusicByIdAsync(Guid musicId);
 
         /// <summary>
-        /// Holt zufällig 10 Musik Einträge, die öffentlich zugänglich sind
+        /// Holt zufällig 9 Musik Einträge, die öffentlich zugänglich sind
         /// </summary>
         /// <returns>Liste mit den Musik Einträgen</returns>
         Task<List<Music>> GetRandomMusicAsync();
@@ -93,7 +93,7 @@ namespace MusiCan.Server.Services
             {
                 if (request.id == Guid.Empty)
                 {
-                    return (null, "Music not found.");
+                    return (null, "Musik ID fehlt.");
                 }
 
                 var music = await _dataContext.Musics
@@ -101,14 +101,14 @@ namespace MusiCan.Server.Services
 
                 if (music == null)
                 {
-                    return (null, "Music not found.");
+                    return (null, "Musik nicht gefunden.");
                 }
 
 
                 if (string.IsNullOrEmpty(request.title) || string.IsNullOrEmpty(request.author)
                     || string.IsNullOrEmpty(request.mimetype) || request.file.Length == 0)
                 {
-                    return (null, "Missing Music Attributes.");
+                    return (null, "Musik Attribute fehlen.");
                 }
 
                 music.Title = request.title;
@@ -140,7 +140,7 @@ namespace MusiCan.Server.Services
                 await transaction.RollbackAsync();
                 Log.Error($"Error while updating music {ex}");
             }
-            return (null, "Something unexpected happend.");
+            return (null, "Server Fehler.");
         }
 
         public async Task<bool> DeleteMusicByIdAsync(Guid musicId)
@@ -184,7 +184,7 @@ namespace MusiCan.Server.Services
 
             return music
                 .OrderBy(m => Guid.NewGuid())
-                .Take(10).ToList();
+                .Take(9).ToList();
         }
 
         public async Task<List<Music>> GetPublicMusicAsync()

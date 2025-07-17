@@ -10,31 +10,30 @@ import { DisplayMusic, MusicService } from '../../services/music.service';
 })
 export class ShowNotesComponent implements OnInit, OnChanges {
   musicPiece!: DisplayMusic;
-  error: boolean = false;
+  error: string = '';
 
   constructor(private route: ActivatedRoute, private musicService: MusicService) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      this.error = true // TODO: Display Error
+      this.error = 'Kein Komponist gefunden.'
       return;
     }
 
     this.musicService.getMusic(id).subscribe({
       next: (response) => {
         this.musicPiece = response;
+        this.error = '';
       },
       error: (error) => {
-        this.error = true // TODO: Display Error
+        this.error = typeof error.error === 'string' ? error.error : error?.message || 'Laden von Komponisten fehlgeschlagen';
       }
     });
-    this.initializeForm();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['music'] && changes['music'].currentValue) {
-      this.initializeForm();
     }
   }
 
@@ -48,19 +47,5 @@ export class ShowNotesComponent implements OnInit, OnChanges {
   getDownloadText(): string {
     if (!this.musicPiece?.contentType) return 'Herunterladen';
     return this.musicPiece.contentType === 'application/pdf' ? 'PDF herunterladen' : 'Bild herunterladen';
-  }
-
-  private initializeForm(): void {
-    //if (this.profile && JSON.stringify(this.profile) !== '{}') {
-    //  this.profileForm = this.fb.group({
-    //    username: [this.profile.name, Validators.required],
-    //    email: [this.profile.mail, [Validators.required, Validators.email]],
-    //    password: ['', [Validators.required, Validators.minLength(6)]],
-    //    role: [this.profile.role, Validators.required],
-    //  });
-    //  this.error = false;
-    //} else {
-    //  this.error = true;
-    //}
   }
 }

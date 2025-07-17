@@ -13,7 +13,6 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
   artistForm!: FormGroup; // Non-null assertion
   isEditing: boolean = false;
   showPassword: boolean = false;
-  error: boolean = false;
   selectedProfileImage: File | null = null;
   profileImagePreview: string | null = null;
   defaultImage = '/Beethoven.jpg';
@@ -26,6 +25,7 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
   @Input() postProfileFn!: (formData: FormData) => Observable<ProfileResponse>;
   @Input() edit!: boolean;
   @Output() switchToArtist = new EventEmitter<{ isArtist: boolean, isEdit: boolean }>();
+  @Output() errorChange = new EventEmitter<string>();
 
   ngOnInit() {
     this.isEditing = this.edit;
@@ -55,9 +55,9 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
         country: [this.profile.country, Validators.required],
         description: [this.profile.description]
       });
-      this.error = false;
+      this.errorChange.emit('');
     } else {
-      this.error = true;
+      this.errorChange.emit('Kein gültiges Profil geladen');
     }
   }
 
@@ -124,6 +124,8 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
       return;
     }
 
+    this.errorChange.emit('');
+
     const formData = new FormData();
     const formValue = this.artistForm.value;
 
@@ -145,10 +147,11 @@ export class ArtistprofileComponent implements OnInit, OnChanges {
     // Pass formData, not this.artistForm
     this.postProfileFn(formData).subscribe({
       next: (response) => {
-        console.log('Profile saved successfully');
+        this.errorChange.emit('');
+        console.log('Profile saved successfully'); // TODO: 
       },
       error: (error) => {
-        console.error('Failed to load profile:', error);
+        this.errorChange.emit(typeof error.error === 'string' ? error.error : error?.message || 'Profil bearbeiten fehlgeschlagen');
       }
     });
 

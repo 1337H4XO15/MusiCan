@@ -16,7 +16,7 @@ namespace MusiCan.Server.Controllers
         private readonly IProfileService _profileService = profileService;
 
         /// <summary>
-        /// Http Get Anfrage um 10 zufällige Musikstücke abzufragen, die öffentlich zugänglich sind
+        /// Http Get Anfrage um 9 zufällige Musikstücke abzufragen, die öffentlich zugänglich sind
         /// </summary>
         /// <returns>Liste der zufälligen Musikstücke</returns>
         [HttpGet("randomMusic")]
@@ -53,7 +53,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during RandomMusic: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -130,7 +130,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during OwnMusic: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -173,7 +173,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during Music: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -204,7 +204,7 @@ namespace MusiCan.Server.Controllers
 
                 if (music == null)
                 {
-                    return NotFound("Music not found.");
+                    return NotFound("Musik nicht gefunden.");
                 }
 
                 DisplayMusic response = new()
@@ -234,8 +234,9 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during Music: {ex}");
-                return StatusCode(500, "Something unexpected happend");
-            }
+                return StatusCode(500, "Server Fehler.");
+
+			}
         }
 
         /// <summary>
@@ -292,14 +293,14 @@ namespace MusiCan.Server.Controllers
 
                 if (request.file_b == null)
                 {
-                    return Conflict("Could not create music.");
+                    return Conflict("Musik konnte nicht erstellt werden, Datei ungültig.");
                 }
 
                 Music music = new(request, user);
 
                 if (!await _musicService.CreateMusicAsync(music))
                 {
-                    return Conflict("Could not create music.");
+                    return Conflict("Musik konnte nicht erstellt werden.");
                 }
 
                 return Ok();
@@ -307,7 +308,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error when creating Music: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -359,7 +360,7 @@ namespace MusiCan.Server.Controllers
 
                 if (request.id == null || request.id == Guid.Empty)
                 {
-                    return Conflict("Missing music id.");
+                    return Conflict("Musik ID nicht fehlt.");
                 }
 
                 (Music? music, string updateError) = await _musicService.UpdateMusicAsync(request);
@@ -375,7 +376,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error when updating Music: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
 
@@ -427,12 +428,12 @@ namespace MusiCan.Server.Controllers
 
                 if (id == Guid.Empty)
                 {
-                    return Conflict("Missing music id.");
-                }
+					return Conflict("Musik ID nicht fehlt.");
+				}
 
                 if (!await _musicService.DeleteMusicByIdAsync(id))
                 {
-                    return Conflict("Could not delete music.");
+                    return Conflict("Musik konnte nicht gelöscht werden.");
                 }
 
                 List<Music> musics = await _musicService.GetMusicByUserIdAsync(user_id);
@@ -462,7 +463,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error when deleting Music: {ex}");
-                return StatusCode(500, "Something unexpected happend");
+                return StatusCode(500, "Server Fehler.");
             }
         }
     }

@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 export class LoginComponent {
   isLoginMode: boolean = true;
   loading: boolean = false;
-  error = '';
+  error: string = '';
 
   onLoadingChange(loading: boolean): void {
     this.loading = loading;

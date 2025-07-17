@@ -16,41 +16,15 @@
         }
     }
 
-    public class RegistrationErrorResponse : ErrorResponse
-    {
-        public RegistrationErrorResponse()
-            : base("Error during registration", 401)
-        {
-        }
-
-        public RegistrationErrorResponse(string msg)
-            : base(msg, 401)
-        {
-        }
-    }
-
-    public class LoginErrorResponse : ErrorResponse
-    {
-        public LoginErrorResponse()
-            : base("Error during login", 401)
-        {
-        }
-
-        public LoginErrorResponse(string msg)
-            : base(msg, 401)
-        {
-        }
-    }
-
     public class InvalidTokenErrorResponse : ErrorResponse
     {
         public InvalidTokenErrorResponse()
-            : base("Invalid Token", 498)
+            : base("Ungültiger Nutzertoken.", 401)
         {
         }
 
         public InvalidTokenErrorResponse(string msg)
-            : base(msg, 498)
+            : base(msg, 401)
         {
         }
     }

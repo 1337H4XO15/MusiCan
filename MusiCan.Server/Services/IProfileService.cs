@@ -68,7 +68,7 @@ namespace MusiCan.Server.Services
 
                 if (user == null)
                 {
-                    return (null, "User not found.");
+                    return (null, "Nutzer nicht gefunden.");
                 }
 
                 // Nutzer
@@ -97,11 +97,11 @@ namespace MusiCan.Server.Services
 
                     if (string.IsNullOrEmpty(request.genre) || string.IsNullOrEmpty(request.country) 
                         || string.IsNullOrEmpty(request.birthYear))
-                    {
-                        return (null, "Missing Composer Attributes.");
-                    }
+					{
+						return (null, "Nutzer konnte nicht bearbeitet werden, Komponisten Attribute fehlen.");
+					}
 
-                    user.Composer.ArtistName = request.name;
+					user.Composer.ArtistName = request.name;
                     user.Composer.Genre = request.genre;
                     user.Composer.Country = request.country;
                     user.Composer.Description = request.description;
@@ -133,7 +133,7 @@ namespace MusiCan.Server.Services
                 await transaction.RollbackAsync();
                 Log.Error($"Error while updating user {ex}");
             }
-            return (null, "Something unexpected happend.");
+            return (null, "Server Fehler.");
         }
 
         public async Task<Composer?> GetComposerByIdAsync(Guid id)

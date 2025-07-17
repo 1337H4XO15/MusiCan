@@ -2,6 +2,9 @@
   <img src="/background.jpg" class="bg-img" alt="Background" />
 </div>
 
+<!-- Error Display -->
+<app-error-page *ngIf="error" [error]="error" />
+
 <div class="container my-5 d-flex justify-content-center">
   <div class="glass-card p-5 w-100" style="max-width: 600px;">
     <h2 class="mb-4 text-white">

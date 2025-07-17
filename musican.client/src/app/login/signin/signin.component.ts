@@ -11,7 +11,6 @@ import { AuthService } from '../../services/auth.service';
 })
 
 export class SigninComponent implements OnInit {
-  @Output() modeChange = new EventEmitter<'login' | 'register'>();
   @Output() loadingChange = new EventEmitter<boolean>();
   @Output() errorChange = new EventEmitter<string>();
 
@@ -46,14 +45,10 @@ export class SigninComponent implements OnInit {
         },
         error: (error) => {
           this.loadingChange.emit(false);
-          this.errorChange.emit('Login failed: Username or Password are wrong');
+          this.errorChange.emit(typeof error.error === 'string' ? error.error : error?.message || 'Anmeldung fehlgeschlagen');
         }
       });
     }
-  }
-
-  switchToRegister(): void {
-    this.modeChange.emit('register');
   }
 
   // Helper methods for template

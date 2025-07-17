@@ -13,7 +13,7 @@ export class NotesComponent implements OnInit {
   @Input() random: boolean = false; // Standardwert
   @Input() own: boolean = false; //nur eigene Musikstücke anzeigen
   searchTerm: string = '';
-  error: boolean = false;
+  error: string = '';
   selectedPiece: any;
   allPieces!: MusicListResponse;
   musicPieces!: MusicListResponse;
@@ -36,9 +36,10 @@ export class NotesComponent implements OnInit {
       next: (response) => {
         this.allPieces = response;
         this.musicPieces = [...this.allPieces];
+        this.error = '';
       },
       error: (error) => {
-        this.error = true // TODO: Display Error
+        this.error = typeof error.error === 'string' ? error.error : error?.message || 'Laden von Noten fehlgeschlagen';
       }
     });
 
@@ -76,9 +77,10 @@ export class NotesComponent implements OnInit {
       next: (response) => {
         this.allPieces = response;
         this.musicPieces = [...this.allPieces]; // TODO: display Success
+        this.error = '';
       },
-      error: (err) => {
-        console.error('Fehler beim Löschen:', err);// TODO: display Error
+      error: (error) => {
+        this.error = typeof error.error === 'string' ? error.error : error?.message || 'Laden von Komponisten fehlgeschlagen';
       }
     });
   }

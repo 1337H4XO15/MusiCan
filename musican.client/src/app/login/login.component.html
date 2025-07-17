@@ -4,19 +4,16 @@
 
 <div>
   <!-- Error Display -->
-  @if (error) {
-    <app-error-page [error]="error" />
-  }
+  <app-error-page *ngIf="error" [error]="error" />
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center text-white">
+    <div class="spinner-border" role="status" aria-label="Loading"></div>
+  </div>
 
-  @if(isLoginMode) {
-  <app-signin (modeChange)="onModeChange($event)"
-              (loadingChange)="onLoadingChange($event)"
+  <app-signin *ngIf="isLoginMode" (loadingChange)="onLoadingChange($event)"
               (errorChange)="onErrorChange($event)" />
-  } @else {
-  <app-signup (modeChange)="onModeChange($event)"
-              (loadingChange)="onLoadingChange($event)"
+  <app-signup *ngIf="!isLoginMode" (loadingChange)="onLoadingChange($event)"
               (errorChange)="onErrorChange($event)" />
-  }
 </div>
 
 <div class="signin-up-switch">

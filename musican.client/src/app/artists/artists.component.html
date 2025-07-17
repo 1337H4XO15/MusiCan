@@ -2,12 +2,13 @@
   <img src="/background.jpg" class="bg-img" alt="Background" />
 </div>
 
+<!-- Error Display -->
+<app-error-page *ngIf="error" [error]="error" />
+
 <div class="artist-container">
-  <div
-    class="card-wrapper"
-    *ngFor="let artist of artists; let i = index"
-    (click)="toggleCard(i)"
-  >
+  <div class="card-wrapper"
+       *ngFor="let artist of artists; let i = index"
+       (click)="toggleCard(i)">
     <div [class.flipped]="isFlipped(i)" class="card-inner">
       <div class="card-front">
         <img [src]="getArtistImageSrc(artist)" alt="{{ artist.artistName }}" (error)="onImageError($event)" />

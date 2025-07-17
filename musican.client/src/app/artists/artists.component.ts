@@ -10,8 +10,8 @@ import { ComposerListResponse, ComposerService, DisplayComposer } from '../servi
 export class ArtistsComponent implements OnInit {
   flippedCards: Set<number> = new Set();
   artists!: ComposerListResponse;
-  error: boolean = false;
   defaultImage = '/Beethoven.jpg';
+  error: string = '';
 
   constructor(
     private composerService: ComposerService 
@@ -22,9 +22,10 @@ export class ArtistsComponent implements OnInit {
     this.composerService.getComposers().subscribe({
       next: (response) => {
         this.artists = response;
+        this.error = '';
       },
       error: (error) => {
-        this.error = true // TODO: Display Error
+        this.error = typeof error.error === 'string' ? error.error : error?.message || 'Laden von Komponisten fehlgeschlagen';
       }
     });
   }

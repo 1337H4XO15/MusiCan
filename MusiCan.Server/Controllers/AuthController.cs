@@ -5,8 +5,6 @@ using MusiCan.Server.Data;
 using MusiCan.Server.Helper;
 using MusiCan.Server.Services;
 using Serilog;
-using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusiCan.Server.Controllers
 {
@@ -31,15 +29,13 @@ namespace MusiCan.Server.Controllers
                 if (await _authService.CheckUserNameAsync(reg.name))
                 {
                     Log.Warning($"Error during Registration of user {reg.name}: user name is already registrated.");
-                    RegistrationErrorResponse error = new("user name is already registrated");
-                    return StatusCode(error.StatusCode, error.Message);
+                    return Unauthorized("Nutzername wird bereits verwendet.");
                 }
 
                 if (await _authService.CheckUserMailAsync(reg.email))
                 {
                     Log.Warning($"Error during Registration of user {reg.name}: user mail is already registrated.");
-                    RegistrationErrorResponse error = new("user mail is already registrated");
-                    return StatusCode(error.StatusCode, error.Message);
+                    return Unauthorized("E-Mail wird bereits verwendet.");
                 }
 
                 if (reg.isComposer && reg.profileImage != null && !string.IsNullOrEmpty(reg.mimetype))
@@ -52,7 +48,7 @@ namespace MusiCan.Server.Controllers
 
                     if (reg.profileImage_b == null)
                     {
-                        return Conflict("Could not create user.");
+                        return Conflict("Nutzer konnte nicht erstellt werden, Profilbild ungültig.");
                     }
                 }
 
@@ -61,8 +57,7 @@ namespace MusiCan.Server.Controllers
                 if (user == null)
                 {
                     Log.Warning($"Error during Registration of user {reg.name}: user not created.");
-                    RegistrationErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
+                    return Unauthorized("Nutzer konnte nicht erstellt werden.");
                 }
 
                 (string accessToken, DateTime expire) = TokenUtils.GenerateAccessToken(user, _jwt.Value, 60); // 1 Stunde
@@ -79,8 +74,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during Registration of unknown user: {ex}");
-                RegistrationErrorResponse error = new();
-                return StatusCode(error.StatusCode, error.Message);
+                return Unauthorized("Server Fehler.");
             }
         }
 
@@ -99,15 +93,13 @@ namespace MusiCan.Server.Controllers
                 if (user == null)
                 {
                     Log.Warning($"Error during Login of user {login.nameOrMail}: authentication failed.");
-                    LoginErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
+                    return Unauthorized("Anmeldung fehlgeschlagen, Name oder Passwort falsch.");
                 }
 
                 if (user.Role == Roles.Banned)
                 {
                     Log.Warning($"Error during Login of user {user.UserId}: user banned.");
-                    LoginErrorResponse error = new();
-                    return StatusCode(error.StatusCode, error.Message);
+                    return Unauthorized("Anmeldung fehlgeschlagen, Nutzer gebannt.");
                 }
 
                 // 1 Woche oder 1 Stunde
@@ -125,8 +117,7 @@ namespace MusiCan.Server.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Error during Login of unknown user: {ex}");
-                LoginErrorResponse error = new();
-                return StatusCode(error.StatusCode, error.Message);
+                return Unauthorized("Server Fehler.");
             }
         }
     }

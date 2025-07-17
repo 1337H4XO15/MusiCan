@@ -12,8 +12,7 @@ import { MusicService } from '../../services/music.service';
 })
 export class AddNotesComponent implements OnInit {
   musicForm: FormGroup;
-  error: boolean = false;
-  errorMsg: string = '';
+  error: string = '';
   selectedFile: File | null = null;
 
   constructor(
@@ -43,10 +42,10 @@ export class AddNotesComponent implements OnInit {
     if (!input?.files?.length) return;
 
     const file = input.files[0];
-
+    this.error = '';
     // prüfen, ob es sich um eine PDF-Datei handelt
     if (file.type !== 'application/pdf') {
-      this.errorMsg = 'Es dürfen nur PD-Dateien hochgeladen werden.'; 
+      this.error = 'Es dürfen nur PD-Dateien hochgeladen werden.'; 
       input.value = '';
       return;
     }
@@ -71,10 +70,11 @@ export class AddNotesComponent implements OnInit {
 
       this.musicService.postMusic(formData).subscribe({
         next: (response) => {
+          this.error = '';
           this.router.navigate(['/home']); // TODO: success
         },
         error: (error) => {
-          this.error = true
+          this.error = typeof error.error === 'string' ? error.error : error?.message || 'Laden von Komponisten fehlgeschlagen';
         }
       });
     }

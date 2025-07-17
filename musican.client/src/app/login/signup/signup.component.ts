@@ -10,7 +10,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './signup.component.css',
 })
 export class SignupComponent {
-  @Output() modeChange = new EventEmitter<'login' | 'register'>();
   @Output() loadingChange = new EventEmitter<boolean>();
   @Output() errorChange = new EventEmitter<string>();
 
@@ -117,12 +116,19 @@ export class SignupComponent {
       },
       error: (error) => {
         this.loadingChange.emit(false);
-        this.errorChange.emit(error.error || 'Registration failed');
+        this.errorChange.emit(typeof error.error === 'string' ? error.error : error?.message || 'Registration fehlgeschlagen');
       }
     });
   }
 
-  switchToLogin(): void {
-    this.modeChange.emit('login');
-  }
+  // Helper methods for template
+  get email() { return this.registerForm.get('email'); }
+  get name() { return this.registerForm.get('name'); }
+  get password() { return this.registerForm.get('password'); }
+  get confirmPassword() { return this.registerForm.get('confirmPassword'); }
+  get profilePicture() { return this.registerForm.get('profilePicture'); }
+  get genre() { return this.registerForm.get('genre'); }
+  get birthYear() { return this.registerForm.get('birthYear'); }
+  get country() { return this.registerForm.get('country'); }
+  get description() { return this.registerForm.get('description'); }
 }

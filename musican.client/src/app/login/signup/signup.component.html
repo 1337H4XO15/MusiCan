@@ -11,10 +11,9 @@
                formControlName="email" />
         <i class="bi bi-envelope position-absolute icon"></i>
       </div>
-      <div class="text-danger"
-           *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
-           style="font-size: 0.875rem; margin-top: -0.5rem;">
-        Bitte gib eine gültige E-Mail-Adresse ein.
+
+      <div class="field-error" *ngIf="email?.invalid && email?.touched">
+        <span *ngIf="email?.errors?.['required']">E-Mail-Adresse benötigt</span>
       </div>
 
       <div class="form-group position-relative mb-3">
@@ -25,10 +24,9 @@
                formControlName="name" />
         <i class="bi bi-person position-absolute icon"></i>
       </div>
-      <div class="text-danger"
-           *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid"
-           style="font-size: 0.875rem; margin-top: -0.5rem;">
-        Der Nutzername ist erforderlich.
+
+      <div class="field-error" *ngIf="name?.invalid && name?.touched">
+        <span *ngIf="name?.errors?.['required']">Nutzername benötigt</span>
       </div>
 
       <div class="form-group position-relative mb-3">
@@ -48,6 +46,10 @@
         <i class="bi bi-lock position-absolute icon"></i>
       </div>
 
+      <div class="field-error" *ngIf="password?.invalid && password?.touched && password?.errors?.['required']">
+        <span>Passwort benötigt</span>
+      </div>
+
       <div class="form-group position-relative mb-3">
         <input [type]="showPassword ? 'text' : 'password'"
                id="confirmPassword"
@@ -55,6 +57,10 @@
                placeholder="Passwort wiederholen"
                formControlName="confirmPassword" />
         <i class="bi bi-lock position-absolute icon"></i>
+      </div>
+
+      <div class="field-error" *ngIf="confirmPassword?.invalid && confirmPassword?.touched && confirmPassword?.errors?.['required']">
+        <span>Passwort benötigt</span>
       </div>
 
       <div class="form-group mb-3">
@@ -91,6 +97,10 @@
           <i class="bi bi-calendar-fill position-absolute icon"></i>
         </div>
 
+        <div class="field-error" *ngIf="birthYear?.invalid && birthYear?.touched">
+          <span *ngIf="birthYear?.errors?.['required']">Geburtsjahr benötigt</span>
+        </div>
+
         <div class="form-group position-relative mb-3">
           <input type="text"
                  id="genre"
@@ -100,6 +110,10 @@
           <i class="bi bi-music-note-beamed position-absolute icon"></i>
         </div>
 
+        <div class="field-error" *ngIf="genre?.invalid && genre?.touched">
+          <span *ngIf="genre?.errors?.['required']">Genre benötigt</span>
+        </div>
+
         <div class="form-group position-relative mb-3">
           <input type="text"
                  id="country"
@@ -107,6 +121,10 @@
                  placeholder="Herkunftsland"
                  formControlName="country" />
           <i class="bi bi-globe-europe-africa-fill position-absolute icon"></i>
+        </div>
+
+        <div class="field-error" *ngIf="country?.invalid && country?.touched">
+          <span *ngIf="country?.errors?.['required']">Herkunftsland benötigt</span>
         </div>
 
         <div class="form-group position-relative mb-3">

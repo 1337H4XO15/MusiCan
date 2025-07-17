@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import {  Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -47,6 +47,7 @@ export class ProfilComponent implements OnInit {
   isArtist: boolean = false;
   edit: boolean = false;
   postProfileFn = this.updateProfile.bind(this); // Forwarding von http
+  error: string = '';
 
   constructor(private http: HttpClient,
     private router: Router,
@@ -61,7 +62,7 @@ export class ProfilComponent implements OnInit {
 
     this.getProfile().subscribe({
       next: (response) => {
-        console.log('Profile loaded successfully');
+        console.log('Profile loaded successfully'); // TODO: 
       },
       error: (error) => {
         console.error('Failed to load profile:', error);

@@ -85,7 +85,7 @@ namespace MusiCan.Server.Services
 					if (string.IsNullOrEmpty(request.genre) || string.IsNullOrEmpty(request.country)
 		                || string.IsNullOrEmpty(request.birthYear))
 					{
-						return (null, "Missing Composer Attributes.");
+						return (null, "Nutzer konnte nicht erstellt werden, Komponisten Attribute fehlen.");
 					}
 
 					user.Composer.ArtistName = request.name;
@@ -122,7 +122,7 @@ namespace MusiCan.Server.Services
 				await transaction.RollbackAsync();
 				Log.Error($"Error while creating user {ex}");
 			}
-			return (null, "Something unexpected happend.");
+			return (null, "Nutzer konnte nicht erstellt werden.");
 		}
 
         public async Task<User?> AuthenticateAsync(string namemail, string password)
